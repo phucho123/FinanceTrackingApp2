@@ -11,9 +11,12 @@ import Expense from "./screens/FinancialReport/Expense";
 import Income from "./screens/FinancialReport/Income";
 import Budget from "./screens/FinancialReport/Budget";
 import Quote from "./screens/FinancialReport/Quote"
+import Transaction from './screens/Transaction/Transaction';
+import { TouchableOpacity } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 const Stack = createNativeStackNavigator();
 
-function App(){
+function App() {
     const [fontLoaded, fontError] = useFonts({
         'Inter-SemiBold': require('./assets/fonts/Inter-SemiBold.ttf'),
     });
@@ -21,12 +24,24 @@ function App(){
     return (
         <NavigationContainer>
             <Stack.Navigator>
-            <Stack.Screen
+                <Stack.Screen
+                    options={{
+                        headerTitleAlign: "center",
+                        headerLeft: () => (
+                            <TouchableOpacity>
+                                <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
+                            </TouchableOpacity>
+                        ),
+                    }}
+                    name="Transaction"
+                    component={Transaction}
+                />
+                {/* <Stack.Screen
                     options={{ headerShown: false }}
                     name="Quote"
                     component={Quote}
-                />
-            {/* <Stack.Screen
+                /> */}
+                {/* <Stack.Screen
                     options={{ headerShown: false }}
                     name="IncomeTransaction"
                     component={IncomeTransaction}
