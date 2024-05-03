@@ -10,7 +10,8 @@ import ExpenseTransaction from './screens/FinancialReport/ExpenseTransaction';
 import Expense from "./screens/FinancialReport/Expense";
 import Income from "./screens/FinancialReport/Income";
 import Budget from "./screens/FinancialReport/Budget";
-import Quote from "./screens/FinancialReport/Quote"
+import Quote from "./screens/FinancialReport/Quote";
+import HomeSceen from "./screens/HomeScreen"
 const Stack = createNativeStackNavigator();
 
 function App(){
@@ -23,8 +24,8 @@ function App(){
             <Stack.Navigator>
             <Stack.Screen
                     options={{ headerShown: false }}
-                    name="Quote"
-                    component={Quote}
+                    name="HomeScreen"
+                    component={HomeSceen}
                 />
             {/* <Stack.Screen
                     options={{ headerShown: false }}
