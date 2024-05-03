@@ -9,7 +9,7 @@ const Header = ({ color, navigation, title, colorTitle, backButton }) => {
       <Pressable onPress={() => navigation.goBack()}>
         <Image source={backButton === 'white' ? BackButtonWhite : BackButton} style={styles.backButton} />
       </Pressable>
-      <Text style={[styles.headerTitle, { color: colorTitle }]}>{ title }</Text>
+      <Text style={[styles.headerTitle, { color: colorTitle }]}>{title}</Text>
     </View>
   );
 }
