@@ -5,7 +5,12 @@ import { useFonts } from 'expo-font'
 import OnboardingScreen from './screens/OnboardingScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
-
+import IncomeTransaction from './screens/FinancialReport/IncomeTransaction';
+import ExpenseTransaction from './screens/FinancialReport/ExpenseTransaction';
+import Expense from "./screens/FinancialReport/Expense";
+import Income from "./screens/FinancialReport/Income";
+import Budget from "./screens/FinancialReport/Budget";
+import Quote from "./screens/FinancialReport/Quote"
 const Stack = createNativeStackNavigator();
 
 function App(){
@@ -16,13 +21,24 @@ function App(){
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen
+            <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="Quote"
+                    component={Quote}
+                />
+            {/* <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="IncomeTransaction"
+                    component={IncomeTransaction}
+                /> */}
+
+                {/* <Stack.Screen
                     options={{ headerShown: false }}
                     name="OnboardingScreen"
                     component={OnboardingScreen}
-                />
+                /> */}
 
-                <Stack.Screen
+                {/* <Stack.Screen
                     options={{ headerShown: false }}
                     name="LoginScreen"
                     component={LoginScreen}
@@ -32,7 +48,7 @@ function App(){
                     options={{ headerShown: false}}
                     name="RegisterScreen"
                     component={RegisterScreen}
-                />
+                /> */}
             </Stack.Navigator>
         </NavigationContainer>
     )
