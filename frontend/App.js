@@ -40,7 +40,7 @@ function App() {
                     options={{ headerShown: false }}
                     name="Quote"
                     component={Quote}
-                /> */}
+                />  */}
                 {/* <Stack.Screen
                     options={{ headerShown: false }}
                     name="IncomeTransaction"
