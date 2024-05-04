@@ -10,7 +10,8 @@ import ExpenseTransaction from './screens/FinancialReport/ExpenseTransaction';
 import Expense from "./screens/FinancialReport/Expense";
 import Income from "./screens/FinancialReport/Income";
 import Budget from "./screens/FinancialReport/Budget";
-import Quote from "./screens/FinancialReport/Quote"
+import Quote from "./screens/FinancialReport/Quote";
+import HomeSceen from "./screens/HomeScreen"
 import Transaction from './screens/Transaction/Transaction';
 import { TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
