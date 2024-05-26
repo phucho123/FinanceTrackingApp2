@@ -1,5 +1,6 @@
-import { AuthService } from './auth.service';
 /* eslint-disable prettier/prettier */
+import { AuthService } from './auth.service';
+
 
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { SignUpDto } from './dto/signup.dto';
@@ -14,7 +15,7 @@ export class AuthController {
 
         return this.authService.signUp(signUpDto);
     }
-    @Get('/login')
+    @Post('/login')
     login(@Body() loginDto:LoginDto):Promise<{token:string}>{
 
         return this.authService.login(loginDto);

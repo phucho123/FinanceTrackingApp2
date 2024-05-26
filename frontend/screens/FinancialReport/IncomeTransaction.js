@@ -1,8 +1,29 @@
+import React, { useState } from 'react'
 import React from "react";
-import { SafeAreaView, View, ScrollView, Text, Image, ImageBackground, } from "react-native";
+import { SafeAreaView, View, ScrollView, Text, Image, ImageBackground,StyleSheet,TouchableOpacity  } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
 import  FontAwesome  from '@expo/vector-icons/FontAwesome';
+import { LineChart, PieChart } from 'react-native-gifted-charts';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import ChangeTypeButton from '../../components/ChangeTypeButton';
+import Select from '../../components/Select';
+import CategoryCard from '../../components/CategoryCard';
+import TransactionCard from '../../components/TransactionCard';
+
+const data1 = [
+    { label: 'Day', value: 'day' },
+    { label: 'Month', value: 'month' },
+    { label: 'Year', value: 'year' },
+];
+
+const data2 = [{ value: 50 }, { value: 80 }, { value: 90 }, { value: 70 }, { value: 70 }, { value: 60 }, { value: 70 }];
+
+const data3 = [
+    { label: "Transaction", value: "transaction" },
+    { label: "Category", value: "category" }
+];
+
 export default (props) => {
     
     
@@ -141,18 +162,78 @@ export default (props) => {
         )
     }
 
-    const mainChart = () => {
-        return (
-            <View 
-				style = {{
-					height: 169,
-					borderColor: "#5E27FD",
-					borderWidth: 1,
-				}}>
-			</View>
+    // const mainChart = () => {
+    //     return (
+    //         <View 
+	// 			style = {{
+	// 				height: 169,
+	// 				borderColor: "#5E27FD",
+	// 				borderWidth: 1,
+	// 			}}>
+	// 		</View>
 			
-        )
-    }
+    //     )
+    // }
+	const mainChart = () => {
+        return (
+            <View style={styles.chartContainer}>
+                <View style={{ justifyContent: "center", width: "100%", alignItems: "center" }}>
+                    {
+                        typeGraph == "linechart" ? <LineChart data={data2} areaChart startFillColor1='#7F3DFF' /> :
+                            <PieChart data={data2} donut innerRadius={100} outerRadius={150} />
+                    }
+                    <View style={styles.changeGraphTypeButton}>
+                        <ChangeTypeButton
+                            type1={
+                                <TouchableOpacity style={styles.changeTypeTouchable}
+                                    onPress={() => setTypeGraph("linechart")}
+                                >
+                                    <Fontisto name="share" size={24}
+                                        color={typeGraph == "linechart" ? "white" : "#7F3DFF"}
+                                        onPress={() => setTypeGraph("linechart")} />
+                                </TouchableOpacity>
+                            }
+
+                            type2={
+                                <TouchableOpacity style={styles.changeTypeTouchable}
+                                    onPress={() => setTypeGraph("piechart")}
+                                >
+                                    <Fontisto name="pie-chart-1" size={24}
+                                        color={typeGraph == "piechart" ? "white" : "#7F3DFF"}
+                                        onPress={() => setTypeGraph("piechart")} />
+                                </TouchableOpacity>
+                            }
+
+                            typeSelect={typeGraph == "linechart" ? 1 : 2}
+
+                            style={
+                                StyleSheet.create({
+                                    container: {
+                                        width: 100,
+                                        borderRadius: 15
+                                    },
+                                    block: typeGraph == "linechart" ? {
+                                        height: "100%",
+                                        padding: 8,
+                                        borderTopLeftRadius: 13,
+                                        borderBottomLeftRadius: 13,
+                                        backgroundColor: "#7F3DFF"
+                                    } : {
+                                        height: "100%",
+                                        padding: 8,
+                                        borderTopRightRadius: 13,
+                                        borderBottomRightRadius: 13,
+                                        backgroundColor: "#7F3DFF"
+                                    }
+                                })
+                            }
+                        />
+                    </View>
+                </View>
+            </View>
+        );
+    };
+
 
     const main = () => {
         return (
@@ -474,3 +555,12 @@ export default (props) => {
 		
     )
 }
+const styles = StyleSheet.create({
+	chartContainer: {
+        height: 300,
+        borderColor: "#5E27FD",
+        borderWidth: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+});
