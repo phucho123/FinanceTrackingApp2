@@ -25,7 +25,7 @@ function App() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen
+                {/*<Stack.Screen
                     options={{
                         headerTitleAlign: "center",
                         headerLeft: () => (
@@ -37,16 +37,16 @@ function App() {
                     name="Transaction"
                     component={Transaction}
                 />
-                {/* <Stack.Screen
+                 <Stack.Screen
                     options={{ headerShown: false }}
-                    name="Quote"
-                    component={Quote}
+                    name="Homescreen"
+                    component={HomeSceen}
                 />  */}
-                {/* <Stack.Screen
+                 <Stack.Screen
                     options={{ headerShown: false }}
                     name="IncomeTransaction"
                     component={IncomeTransaction}
-                /> */}
+                /> 
 
                 {/* <Stack.Screen
                     options={{ headerShown: false }}

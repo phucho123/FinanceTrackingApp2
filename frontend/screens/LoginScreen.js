@@ -13,7 +13,7 @@ import React, {useState} from 'react';
 
 import BackButton from '../assets/arrow-left-black.png';
 import Eye from '../assets/eye.png';
-
+import loginLogo from '../assets/login.png';
 const widthScreen = Dimensions.get('window').width;
 
 const LoginScreen = ({navigation}) => {
@@ -29,13 +29,10 @@ const LoginScreen = ({navigation}) => {
     return (
         <View style={styles.container}>
             {/* header */}
-            <View style={styles.headerContainer}>
-                {/* <Pressable onPress={() => navigation.goBack()}>
-                    <Image source={BackButton} style={styles.backButton}/>
-                </Pressable> */}
-                <Text style={styles.headerTitle}>Login</Text>
-            </View>
-
+           
+            <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 120}}>
+            <Image source={loginLogo} style={{width: 300, height: 300}} />
+        </View>
             {/* form */}
             <View style={styles.formContainer}>
                 <TextInput
@@ -51,6 +48,7 @@ const LoginScreen = ({navigation}) => {
                         placeholder="Password"
                         placeholderTextColor="#91919F"
                         value={password}
+                        secureTextEntry={visibleEntry}
                         onChangeText={value => setPassword(value)}
                     />
                     <Pressable onPress={() => setVisibleEntry(!visibleEntry)}>
@@ -104,7 +102,7 @@ const styles = StyleSheet.create({
   
     // header
     headerContainer: {
-      marginTop: 40,
+      marginTop: 140,
       flexDirection: 'row',
       justifyContent: 'center',
     },
@@ -116,25 +114,28 @@ const styles = StyleSheet.create({
       fontFamily: 'Inter-SemiBold',
       color: '#000',
       fontSize: 18,
+      marginTop: 140,
     },
   
     // form
     formContainer: {
-      marginTop: 120,
+      marginTop:90,
       gap: 20,
     },
     textInput: {
+      height: 50,
       borderWidth: 1,
       borderColor: '#F1F1FA',
       paddingHorizontal: 20,
-      borderRadius: 10,
+      borderRadius: 20,
       fontFamily: 'Inter-Medium',
       color: '#000',
     },
     inputPasswordContainer: {
+      height: 50,
       borderWidth: 1,
       borderColor: '#F1F1FA',
-      borderRadius: 10,
+      borderRadius: 20,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-evenly',
@@ -146,8 +147,8 @@ const styles = StyleSheet.create({
       color: '#000'
     },
     eye: {
-      width: 27,
-      height: 20,
+      width: 20,
+      height: 15,
     },
     checked: {
       width: 60,

@@ -14,8 +14,8 @@ import Eye from '../assets/eye.png';
 import CheckBox from 'expo-checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../components/Header';
-
-const widthScreen = Dimensions.get('window').width
+import registerLogo from '../assets/register.png';
+const widthScreen = Dimensions.get('window').width;
 
 const RegisterScreen = ({navigation}) =>  {
     const [visibleEntry, setVisibleEntry] = useState(true);
@@ -28,12 +28,10 @@ const RegisterScreen = ({navigation}) =>  {
 
     return (
         <View style={styles.container}>
-            <View style={styles.headerContainer}>
-                <Text style={{fontFamily:'Inter-SemiBold'}}>
-                    Sign Up
-                </Text>
+           
+            <View style={{alignItems: 'center', justifyContent: 'center', marginTop: 120}}>
+            <Image source={registerLogo} style={{width: 300, height: 300}} />
             </View>
-
             {/* form */}
             <View style={styles.formContainer}>
                 <TextInput
@@ -136,40 +134,41 @@ const styles = StyleSheet.create({
     },
     //header
     headerContainer: {
-        marginTop: 40,
+        marginTop: 20,
         flexDirection: 'row',
         justifyContent: 'center',
     },
     // form
     formContainer: {
-      marginTop: 120,
       gap: 20,
     },
     textInput: {
+        height: 50,
       borderWidth: 1,
       borderColor: '#F1F1FA',
       paddingHorizontal: 20,
-      borderRadius: 10,
+      borderRadius: 20,
       fontFamily: 'Inter-Medium',
       color: '#000',
     },
     inputPasswordContainer: {
       borderWidth: 1,
       borderColor: '#F1F1FA',
-      borderRadius: 10,
+      borderRadius: 20,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-evenly',
       paddingHorizontal: 20,
     },
     inputPassword: {
+        height: 50,
       fontFamily: 'Inter-Medium',
       width: '100%',
       color: '#000',
     },
     eye: {
-      width: 27,
-      height: 20,
+      width: 20,
+      height: 15,
     },
     checked: {
       width: 60,
@@ -177,7 +176,7 @@ const styles = StyleSheet.create({
     },
     signupBtn: {
       backgroundColor: '#7F3DFF',
-      width: widthScreen - 35,
+      width: widthScreen - 45,
       textAlign: 'center',
       color: '#FCFCFC',
       fontFamily: 'Inter-SemiBold',
