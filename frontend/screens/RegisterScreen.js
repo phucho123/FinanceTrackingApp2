@@ -6,14 +6,16 @@ import {
     TextInput,
     View,
     Dimensions,
-    ActivityIndicator,
+    ActivityIndicator,Alert
   } from 'react-native';
+  import axios from 'axios';
 
 import React, {useState} from 'react';
 import Eye from '../assets/eye.png';
 import CheckBox from 'expo-checkbox';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../components/Header';
+import { apiBaseUrl } from '../config';
 
 const widthScreen = Dimensions.get('window').width
 
@@ -25,7 +27,36 @@ const RegisterScreen = ({navigation}) =>  {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const handleSignUp = async () => {
+        setLoading(true);
+        setError('');
 
+        try {
+            const response = await axios.post(`http://${apiBaseUrl}:3000/auth/signup`, {
+                name: name,
+                email: email,
+                password: password
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            setLoading(false);
+            if (response.status === 201) { // 201 for created
+                Alert.alert('Registration Successful', 'You can now log in.', [
+                    { text: 'OK', onPress: () => navigation.navigate('LoginScreen') }
+                ]);
+            } else {
+                console.log("Error:", response.data.message);
+                setError(response.data.message || 'Registration failed');
+            }
+        } catch (error) {
+            console.log("Error details:", error.response ? error.response.data : error.message);
+            setLoading(false);
+            setError(error.response ? error.response.data.message : 'An error occurred. Please try again.');
+        }
+    };
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -83,7 +114,7 @@ const RegisterScreen = ({navigation}) =>  {
                         </Text>
                     </Text>
                 </View>
-                <Pressable style={{backgroundColor:'#FFF'}} onPress={() => {}}>
+                <Pressable style={{backgroundColor:'#FFF'}} onPress={handleSignUp}>
                     <Text style={styles.signupBtn}>
                         {loading ? (
                             <ActivityIndicator size="small" color="#fff" />

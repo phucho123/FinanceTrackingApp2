@@ -11,7 +11,7 @@ import Expense from "./screens/FinancialReport/Expense";
 import Income from "./screens/FinancialReport/Income";
 import Budget from "./screens/FinancialReport/Budget";
 import Quote from "./screens/FinancialReport/Quote";
-import HomeSceen from "./screens/HomeScreen"
+import HomeScreen from "./screens/HomeScreen"
 import Transaction from './screens/Transaction/Transaction';
 import { TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
@@ -25,7 +25,7 @@ function App() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen
+                {/* <Stack.Screen
                     options={{
                         headerTitleAlign: "center",
                         headerLeft: () => (
@@ -36,17 +36,38 @@ function App() {
                     }}
                     name="Transaction"
                     component={Transaction}
-                />
+                /> */}
                 {/* <Stack.Screen
                     options={{ headerShown: false }}
                     name="Quote"
                     component={Quote}
                 />  */}
-                {/* <Stack.Screen
+                <Stack.Screen
                     options={{ headerShown: false }}
                     name="IncomeTransaction"
                     component={IncomeTransaction}
+                />
+                 {/* <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="ExpenseTransaction"
+                    component={ExpenseTransaction}
                 /> */}
+                 {/* <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="Expense"
+                    component={Expense}
+                /> */}
+  {/* <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="Income"
+                    component={Income}
+                /> */}
+                {/* <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="Budget"
+                    component={Budget}
+                /> */}
+
 
                 {/* <Stack.Screen
                     options={{ headerShown: false }}
@@ -54,18 +75,25 @@ function App() {
                     component={OnboardingScreen}
                 /> */}
 
-                {/* <Stack.Screen
+              
+
+{/* <Stack.Screen
                     options={{ headerShown: false }}
                     name="LoginScreen"
                     component={LoginScreen}
                 />
-
+ <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="HomeScreen"
+                    component={HomeScreen}
+                />
                 <Stack.Screen
                     options={{ headerShown: false}}
                     name="RegisterScreen"
                     component={RegisterScreen}
                 /> */}
             </Stack.Navigator>
+           
         </NavigationContainer>
     )
 }

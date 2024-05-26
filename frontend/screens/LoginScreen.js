@@ -6,10 +6,12 @@ import {
     Text,
     TextInput,
     View,
-    StyleSheet
+    StyleSheet,Alert
 } from 'react-native';
+import { apiBaseUrl } from '../config';
 
 import React, {useState} from 'react';
+import axios from 'axios';
 
 import BackButton from '../assets/arrow-left-black.png';
 import Eye from '../assets/eye.png';
@@ -24,7 +26,37 @@ const LoginScreen = ({navigation}) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     
-    const handleSubmit = async () => {};
+    const handleSubmit = async () => {
+      setLoading(true);
+      setError('');
+      try {
+          console.log("Email:", email);
+          console.log("Password:", password);
+
+          const response = await axios.post(`http://${apiBaseUrl}:3000/auth/login`, {
+              email: email,
+              password: password
+          }, {
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+          });
+
+          setLoading(false);
+          if (response.status === 201) { // 201 for created
+              Alert.alert('Login Successful', `Token: ${response.data.token}`);
+              navigation.navigate('HomeScreen')
+          } else {
+              console.log("Error:", response.data.message);
+              setError(response.data.message || 'Login failed');
+          }
+      } catch (error) {
+          console.log("Error details:", error.response ? error.response.data : error.message);
+          setLoading(false);
+          setError(error.response ? error.response.data.message : 'An error occurred. Please try again.');
+      }
+  };
+
 
     return (
         <View style={styles.container}>
@@ -43,7 +75,7 @@ const LoginScreen = ({navigation}) => {
                     placeholder="Email"
                     placeholderTextColor="#91919F"
                     value={email}
-                    onChangeText={value => setEmail(value)}
+                    onChangeText={value => setEmail(value.trim())}
                 />
                 <View style={styles.inputPasswordContainer}>
                     <TextInput
@@ -51,7 +83,8 @@ const LoginScreen = ({navigation}) => {
                         placeholder="Password"
                         placeholderTextColor="#91919F"
                         value={password}
-                        onChangeText={value => setPassword(value)}
+                        secureTextEntry={visibleEntry}
+                        onChangeText={value => setPassword(value.trim())}
                     />
                     <Pressable onPress={() => setVisibleEntry(!visibleEntry)}>
                         <Image source={Eye} style={styles.eye}/>
