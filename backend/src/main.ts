@@ -16,7 +16,9 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type, Accept, Authorization',
     credentials: false, // Enable if you need to include cookies in the requests
   });
-  
-  await app.listen(3000);
+
+  app.setGlobalPrefix('/v1/api');
+
+  await app.listen(5000);
 }
 bootstrap();

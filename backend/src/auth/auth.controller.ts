@@ -1,26 +1,21 @@
 /* eslint-disable prettier/prettier */
+import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { AuthService } from './auth.service';
 
-
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { SignUpDto } from './dto/signup.dto';
-import { LoginDto } from './dto/login.dto';
+import { LoginUserDto } from 'src/users/dtos/LoginUser.dto';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authService:AuthService){
-    }
-    @Post('/signup')
-    signUp(@Body() signUpDto:SignUpDto):Promise<{token:string}>{
+  constructor(private authService: AuthService) {}
 
-        return this.authService.signUp(signUpDto);
-    }
-    @Post('/login')
-    login(@Body() loginDto:LoginDto):Promise<{token:string}>{
+  @Post('/signup')
+  signUp(@Body() createUserDto: CreateUserDto): Promise<{ token: string }> {
+    return this.authService.signUp(createUserDto);
+  }
 
-        return this.authService.login(loginDto);
-    }
-
-
-
+  @Post('/login')
+  login(@Body() loginUserDto: LoginUserDto): Promise<{ token: string }> {
+    return this.authService.login(loginUserDto);
+  }
 }

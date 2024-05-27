@@ -1,48 +1,40 @@
-/* eslint-disable prettier/prettier */
-import { LoginDto } from './dto/login.dto';
-
-import { SignUpDto } from './dto/signup.dto';
+import { LoginUserDto } from 'src/users/dtos/LoginUser.dto';
+import { CreateUserDto } from 'src/users/dtos/CreateUser.dto';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Account } from './schemas/account.schema';
-import { Model } from 'mongoose';
-import * as bcrypt from 'bcryptjs'
+import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
+import { UsersService } from 'src/users/users.service';
+import { encodePassword, comparePasswords } from 'src/utils/bcrypt';
+
 @Injectable()
 export class AuthService {
-    constructor( @InjectModel(Account.name)
-    private accountModel:Model<Account>,
-    private jwtService:JwtService
-){}
-    async signUp(signUpDto:SignUpDto ):Promise<{token:string}>{
-        const {name,email,password}=signUpDto;
-        const hashedPassword=await bcrypt.hash(password,10);
-        const account =await this.accountModel.create({
-            name,
-            email,
-            password:hashedPassword,
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
-        });
-        const token=this.jwtService.sign({id:account._id});
-        return {token}
+  async signUp(createUserDto: CreateUserDto): Promise<{ token: string }> {
+    const hashedPassword = await encodePassword(createUserDto.password);
+    const newUser = await this.usersService.createNewUser({
+      ...createUserDto,
+      password: hashedPassword,
+    });
+    const token = this.jwtService.sign({ id: newUser._id });
+    return { token };
+  }
+
+  async login(loginUserDto: LoginUserDto): Promise<{ token: string }> {
+    const { email, password } = loginUserDto;
+    const findUser = await this.usersService.findByEmail(email);
+    if (!findUser) {
+      throw new UnauthorizedException('Invalid Email or Password!');
     }
 
-    async login(loginDto:LoginDto) :Promise<{token:string}>{
-        const {email,password}=loginDto;
-        const account =await this.accountModel.findOne({email});
-        if(!account){
-            throw new UnauthorizedException('Invalid Email or Password!');
-
-        }
-
-        const isPasswordMatched=await bcrypt.compare(password,account.password);
-        if(!isPasswordMatched){
-
-            throw new UnauthorizedException('Invalid Email or Password!');
-        }
-        const token=this.jwtService.sign({id:account._id});
-        return {token}
-
-
+    const isPasswordMatched = comparePasswords(password, findUser.password);
+    if (!isPasswordMatched) {
+      throw new UnauthorizedException('Invalid Email or Password!');
     }
+    const token = this.jwtService.sign({ id: findUser._id });
+    return { token };
+  }
 }

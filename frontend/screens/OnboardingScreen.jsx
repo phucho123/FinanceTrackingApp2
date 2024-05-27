@@ -9,19 +9,19 @@ const slides = [
         key: "slide1",
         title: "Get Your Money On Fleek",
         text: "Create an account so you can mange your personal expenses",
-        image: require("../../assets/images/onboarding1.png"),
+        image: require("../assets/images/onboarding1.png"),
     },
     {
         key: "slide2",
         title: "Track Every Buck With Ease",
         text: "Track your transaction easily, with categories and financial report",
-        image: require("../../assets/images/onboarding2.png"),
+        image: require("../assets/images/onboarding2.png"),
     },
     {
         key: "slide3",
         title: "Tailor Your Budget, Nail Your Goals!",
         text: "You can set your daily, monthly and weekly budget with this app",
-        image: require("../../assets/images/onboarding3.png"),
+        image: require("../assets/images/onboarding3.png"),
     },
 ];
 
@@ -31,14 +31,14 @@ const renderSlide = ({ item, navigation }) => {
             <Image source={item.image} style={styles.image} />
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.text}>{item.text}</Text>
-            <View style={styles.buttonsContainer}>
+            {/* <View style={styles.buttonsContainer}>
                 <Pressable style={{ backgroundColor: "#FFF" }} onPress={() => navigation.navigate("RegisterScreen")}>
                     <Text style={styles.signupBtn}>Sign Up</Text>
                 </Pressable>
                 <Pressable style={{ backgroundColor: "#FFF" }} onPress={() => navigation.navigate("LoginScreen")}>
                     <Text style={styles.loginBtn}>Login</Text>
                 </Pressable>
-            </View>
+            </View> */}
         </View>
     );
 };
@@ -51,6 +51,20 @@ const OnboardingScreen = ({ navigation }) => {
             dotStyle={styles.dotStyle}
             activeDotStyle={styles.activeDotStyle}
             showSkipButton={true}
+            renderNextButton={() => {
+                return (
+                    <View style={{}}>
+                        <Text>Next</Text>
+                    </View>
+                );
+            }}
+            renderSkipButton={() => {
+                return (
+                    <View>
+                        <Text>Skip</Text>
+                    </View>
+                );
+            }}
             onSkip={() => console.log("Skipped")}
             onDone={() => console.log("Done")}
         />

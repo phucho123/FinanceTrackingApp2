@@ -104,7 +104,7 @@ export default function MainTabs() {
                 }}
             />
             <Tab.Screen
-                name="Budget"
+                name="BudgetMain"
                 component={HomeBudget}
                 options={{
                     tabBarIcon: ({ focused }) => {
