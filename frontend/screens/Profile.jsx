@@ -5,11 +5,12 @@ import EditIcon from "../assets/svg/edit.svg";
 import LogOutIcon from "../assets/svg/logout.svg";
 import MainButton from "../components/button/MainButton";
 import { GlobalContext } from "../context/GlobalContext";
+import { primaryColor } from "../styles/global";
 
 export default function Profile({ navigation }) {
     const [openModal, setOpenModal] = useState(false);
 
-    const { setUser } = useContext(GlobalContext);
+    const { user, setUser } = useContext(GlobalContext);
 
     return (
         <View style={styles.container}>
@@ -78,15 +79,31 @@ export default function Profile({ navigation }) {
                     </View>
                 </View>
             </Modal>
-            <View>
-                <Image />
-                <View>
-                    <Text>Username</Text>
-                    <Text>Hao Anh Phan</Text>
+            <View
+                style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 50 }}
+            >
+                <View style={{ flexDirection: "row" }}>
+                    <View
+                        style={{
+                            padding: 5,
+                            backgroundColor: "#fff",
+                            borderRadius: 50,
+                            borderWidth: 3,
+                            borderColor: primaryColor,
+                        }}
+                    >
+                        <Image style={{ width: 80, height: 80, borderRadius: 50 }} source={{ uri: user.avatarUrl }} />
+                    </View>
+                    <View style={{ marginLeft: 16, justifyContent: "center" }}>
+                        <Text style={{ color: "#91919F", fontSize: 14, fontWeight: "medium" }}>Username</Text>
+                        <Text style={{ color: "#000", fontSize: 24, fontWeight: "bold" }}>{user.name}</Text>
+                    </View>
                 </View>
-                <EditIcon width={32} height={32} stroke="red" />
+                <TouchableOpacity>
+                    <EditIcon width={40} height={40} stroke="#000" />
+                </TouchableOpacity>
             </View>
-            <View style={{ padding: 16, backgroundColor: "#fff" }}>
+            <View style={{ padding: 16, backgroundColor: "#fff", marginTop: 32, borderRadius: 24 }}>
                 <TouchableOpacity
                     onPress={() => {
                         setOpenModal(true);

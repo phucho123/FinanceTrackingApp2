@@ -73,13 +73,18 @@ function HomeBudget({ navigation }) {
             </View>
             <View style={styles.listContainer}>
                 <View style={{ width: "100%", height: "85%" }}>
-                    {/* <Text style={styles.emptyText}>You don’t have a budget.</Text>
-                    <Text style={styles.emptyText}>Let’s make one so you in control.</Text> */}
-                    <FlatList
-                        data={user.budgets}
-                        renderItem={({ item }) => <BudgetItem navigation={navigation} budget={item} />}
-                        ItemSeparatorComponent={() => <View style={{ height: 15 }}></View>}
-                    />
+                    {user.budgets.length > 0 ? (
+                        <FlatList
+                            data={user.budgets}
+                            renderItem={({ item }) => <BudgetItem navigation={navigation} budget={item} />}
+                            ItemSeparatorComponent={() => <View style={{ height: 15 }}></View>}
+                        />
+                    ) : (
+                        <>
+                            <Text style={styles.emptyText}>You don’t have a budget.</Text>
+                            <Text style={styles.emptyText}>Let’s make one so you in control.</Text>
+                        </>
+                    )}
                 </View>
                 <MainButton
                     pressHandler={() => {

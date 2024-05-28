@@ -30,7 +30,7 @@ const LoginScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const { user, setUser } = useContext(GlobalContext);
+    const { setUser } = useContext(GlobalContext);
 
     const handleUser = async (userId) => {
         try {

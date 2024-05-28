@@ -249,7 +249,7 @@ export default function HomeScreen({ navigation }) {
                             borderColor: primaryColor,
                         }}
                     >
-                        <Image source={avatarImage} style={styles.avatar} />
+                        <Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
                     </View>
                     <TouchableOpacity
                         style={{
