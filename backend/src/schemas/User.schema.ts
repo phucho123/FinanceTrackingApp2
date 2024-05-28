@@ -16,7 +16,10 @@ export class User {
   @Prop({ required: true })
   password: string;
 
-  @Prop()
+  @Prop({
+    default:
+      'https://i.pinimg.com/564x/c5/68/5b/c5685b5750a7e427638a637f68cddb5b.jpg',
+  })
   avatarUrl: string;
 
   @Prop({

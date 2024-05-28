@@ -24,6 +24,7 @@ import CreateBudget from "./screens/Budget/CreateBudget";
 import DetailBudget from "./screens/Budget/DetailBudget";
 import { primaryColor } from "./styles/global";
 import HomeOnboardScreen from "./screens/HomeOnboardScreen";
+import LaunchScreen from "./screens/LaunchScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -123,6 +124,7 @@ function App() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
+                <Stack.Screen name="Launch" component={LaunchScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="HomeOnboard" component={HomeOnboardScreen} options={{ headerShown: false }} />
                 <Stack.Screen
                     name="Login"
@@ -160,7 +162,50 @@ function App() {
                         headerShadowVisible: false,
                     }}
                 />
-                <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
+                <Stack.Screen
+                    name="CreateBudget"
+                    component={CreateBudget}
+                    options={{
+                        title: "Create Budget",
+                        headerStyle: {
+                            backgroundColor: primaryColor,
+                        },
+                        headerTitleAlign: "center",
+                        headerTintColor: "#fff",
+                        headerTitleStyle: {
+                            fontSize: 18,
+                            color: "#fff",
+                            fontFamily: "Inter-Bold",
+                        },
+                        headerShadowVisible: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="DetailBudget"
+                    component={DetailBudget}
+                    options={{
+                        headerShown: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="EditBudget"
+                    component={CreateBudget}
+                    options={{
+                        title: "Edit Budget",
+                        headerStyle: {
+                            backgroundColor: primaryColor,
+                        },
+                        headerTitleAlign: "center",
+                        headerTintColor: "#fff",
+                        headerTitleStyle: {
+                            fontSize: 18,
+                            color: "#fff",
+                            fontFamily: "Inter-Bold",
+                        },
+                        headerShadowVisible: false,
+                    }}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );

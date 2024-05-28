@@ -22,6 +22,7 @@ export class BudgetsService {
 
   async createNewBudget({ userId, ...createBudgetDto }: CreateBudgetDto) {
     const user = await this.usersService.findById(userId);
+    console.log(user);
     if (!user) throw new HttpException('User Not Found', 404);
     const { categoryName } = createBudgetDto;
     const filteredTransactions = user.transactions.filter((transaction) => {

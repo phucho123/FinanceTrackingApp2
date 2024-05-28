@@ -10,8 +10,8 @@ export class BudgetsController {
   constructor(private budgetsService: BudgetsService) {}
 
   @Post()
-  createBudget(@Body() createBudgetDto: CreateBudgetDto) {
-    return this.budgetsService.createNewBudget(createBudgetDto);
+  async createBudget(@Body() createBudgetDto: CreateBudgetDto) {
+    return await this.budgetsService.createNewBudget(createBudgetDto);
   }
 
   @Patch(':id')

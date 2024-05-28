@@ -10,9 +10,8 @@ import { encodePassword, comparePasswords } from 'src/utils/bcrypt';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  async findAll(): Promise<User[]> {
-    const users = await this.userModel.find();
-    return users;
+  findAll() {
+    return this.userModel.find().populate(['transactions', 'budgets']);
   }
 
   async createNewUser(createUserDto: CreateUserDto) {
@@ -21,10 +20,8 @@ export class UsersService {
     return createdUser.save();
   }
 
-  async findById(id: string) {
-    const user = await this.userModel.findById(id);
-    if (!user) throw new HttpException('User Not Found', 404);
-    return user;
+  findById(id: string) {
+    return this.userModel.findById(id).populate(['transactions', 'budgets']);
   }
 
   async findByEmail(email: string) {

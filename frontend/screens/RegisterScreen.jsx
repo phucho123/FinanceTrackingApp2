@@ -40,7 +40,7 @@ const RegisterScreen = ({ navigation }) => {
 
         try {
             const response = await axios.post(
-                `http://${apiBaseUrl}:3000/auth/signup`,
+                `${apiBaseUrl}/auth/signup`,
                 {
                     name: name,
                     email: email,
@@ -57,7 +57,7 @@ const RegisterScreen = ({ navigation }) => {
             if (response.status === 201) {
                 // 201 for created
                 Alert.alert("Registration Successful", "You can now log in.", [
-                    { text: "OK", onPress: () => navigation.navigate("LoginScreen") },
+                    { text: "OK", onPress: () => navigation.navigate("Main") },
                 ]);
             } else {
                 console.log("Error:", response.data.message);

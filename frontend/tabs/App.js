@@ -27,64 +27,64 @@ function App() {
             <Stack.Navigator>
                 {" "}
                 {/* <Stack.Screen
-                                options={{
-                                    headerTitleAlign: "center",
-                                    headerLeft: () => (
-                                        <TouchableOpacity>
-                                            <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
-                                        </TouchableOpacity>
-                                    ),
-                                }}
-                                name="Transaction"
-                                component={Transaction}
-                            /> */}{" "}
+                                            options={{
+                                                headerTitleAlign: "center",
+                                                headerLeft: () => (
+                                                    <TouchableOpacity>
+                                                        <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
+                                                    </TouchableOpacity>
+                                                ),
+                                            }}
+                                            name="Transaction"
+                                            component={Transaction}
+                                        /> */}{" "}
                 {/* <Stack.Screen
-                                options={{ headerShown: false }}
-                                name="Quote"
-                                component={Quote}
-                            />  */}{" "}
+                                            options={{ headerShown: false }}
+                                            name="Quote"
+                                            component={Quote}
+                                        />  */}{" "}
                 <Stack.Screen options={{ headerShown: false }} name="IncomeTransaction" component={IncomeTransaction} />{" "}
                 {/* <Stack.Screen
-                                options={{ headerShown: false }}
-                                name="ExpenseTransaction"
-                                component={ExpenseTransaction}
-                            /> */}{" "}
+                                            options={{ headerShown: false }}
+                                            name="ExpenseTransaction"
+                                            component={ExpenseTransaction}
+                                        /> */}{" "}
                 {/* <Stack.Screen
-                                options={{ headerShown: false }}
-                                name="Expense"
-                                component={Expense}
-                            /> */}{" "}
+                                            options={{ headerShown: false }}
+                                            name="Expense"
+                                            component={Expense}
+                                        /> */}{" "}
                 {/* <Stack.Screen
-                                options={{ headerShown: false }}
-                                name="Income"
-                                component={Income}
-                            /> */}{" "}
+                                            options={{ headerShown: false }}
+                                            name="Income"
+                                            component={Income}
+                                        /> */}{" "}
                 {/* <Stack.Screen
-                                options={{ headerShown: false }}
-                                name="Budget"
-                                component={Budget}
-                            /> */}
+                                            options={{ headerShown: false }}
+                                            name="Budget"
+                                            component={Budget}
+                                        /> */}{" "}
                 {/* <Stack.Screen
-                                options={{ headerShown: false }}
-                                name="OnboardingScreen"
-                                component={OnboardingScreen}
-                            /> */}
+                                            options={{ headerShown: false }}
+                                            name="OnboardingScreen"
+                                            component={OnboardingScreen}
+                                        /> */}{" "}
                 {/* <Stack.Screen
-                                options={{ headerShown: false }}
-                                name="LoginScreen"
-                                component={LoginScreen}
-                            />
-             <Stack.Screen
-                                options={{ headerShown: false }}
-                                name="HomeScreen"
-                                component={HomeScreen}
-                            />
-                            <Stack.Screen
-                                options={{ headerShown: false}}
-                                name="RegisterScreen"
-                                component={RegisterScreen}
-                            /> */}{" "}
-            </Stack.Navigator>
+                                            options={{ headerShown: false }}
+                                            name="LoginScreen"
+                                            component={LoginScreen}
+                                        />
+                         <Stack.Screen
+                                            options={{ headerShown: false }}
+                                            name="HomeScreen"
+                                            component={HomeScreen}
+                                        />
+                                        <Stack.Screen
+                                            options={{ headerShown: false}}
+                                            name="RegisterScreen"
+                                            component={RegisterScreen}
+                                        /> */}{" "}
+            </Stack.Navigator>{" "}
         </NavigationContainer>
     );
 }

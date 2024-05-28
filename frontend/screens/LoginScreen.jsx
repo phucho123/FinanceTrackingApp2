@@ -52,9 +52,8 @@ const LoginScreen = ({ navigation }) => {
             setLoading(false);
             if (response.status === 201) {
                 // 201 for created
-                console.log("sfds");
                 Alert.alert("Login Successful", `Token: ${response.data.token}`);
-                navigation.navigate("HomeScreen");
+                navigation.navigate("Main");
             } else {
                 console.log("Error:", response.data.message);
                 setError(response.data.message || "Login failed");

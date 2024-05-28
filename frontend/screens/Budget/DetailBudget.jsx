@@ -63,7 +63,7 @@ export default function DetailBudget({ navigation }) {
                                 pressHandler={() => {
                                     console.log("This budget was deleted successfully!!!");
                                     setOpenModal((prev) => !prev);
-                                    navigation.navigate("Budget");
+                                    navigation.navigate("HomeBudget");
                                 }}
                             />
                         </View>
@@ -73,7 +73,7 @@ export default function DetailBudget({ navigation }) {
 
             <View>
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.navigate("Budget")}>
+                    <TouchableOpacity onPress={() => navigation.navigate("HomeBudget")}>
                         <ArrowLefIcon fill="black" />
                     </TouchableOpacity>
                     <Text style={styles.headerTitle}>Detail Budget</Text>
