@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
     TouchableOpacity,
     Switch,
@@ -9,54 +9,86 @@ import {
     Platform,
     StatusBar,
     StyleSheet,
+    Alert,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { primaryColor, globalStyles } from "../../styles/global";
 import Slider from "@react-native-community/slider";
 import MainButton from "../../components/button/MainButton";
-import Switches from "../../components/button/Switches";
 
 import ArrowDownIcon from "../../assets/svg/arrow-down-2.svg";
 import CloseIcon from "../../assets/svg/close.svg";
 
+import { GlobalContext } from "../../context/GlobalContext";
+import { apiBaseUrl } from "../../config";
+
+import axios from "axios";
+
 const budgetCategoryList = [
     {
         name: "Shopping",
-        value: "shopping",
+        value: "Shopping",
     },
     {
         name: "Transporting",
-        value: "transport",
+        value: "Transport",
     },
     {
         name: "Travel",
-        value: "travel",
+        value: "Travel",
     },
     {
-        name: "Eat and Drink",
-        value: "drinkEat",
+        name: "Food",
+        value: "Food",
+    },
+    {
+        name: "Subscription",
+        value: "Subscription",
     },
 ];
 
 function CreateBudget({ navigation }) {
-    const [budget, setBudget] = useState(0);
+    const [maxMoney, setMaxMoney] = useState(0);
     const [isAlert, setIsAlert] = useState(false);
-    const [category, setCategory] = useState(null);
+    const [categoryName, setCategoryName] = useState(null);
     const [isFocus, setIsFocus] = useState(false);
-    const [value, setValue] = useState(0);
+    const [alertPoint, setAlertPoint] = useState(0);
 
     const [open, setOpen] = useState(false);
+    const { user } = useContext(GlobalContext);
 
     const Item = (props) => {
         return (
             <TouchableOpacity onPress={() => props.onPress(props)} activeOpacity={0.5}>
-                <View style={category === props.item.value ? styles.selectedItemContainer : styles.itemContainer}>
-                    <Text style={category === props.item.value ? styles.selectedItemText : styles.itemText}>
+                <View style={categoryName === props.item.value ? styles.selectedItemContainer : styles.itemContainer}>
+                    <Text style={categoryName === props.item.value ? styles.selectedItemText : styles.itemText}>
                         {props.item.name}
                     </Text>
                 </View>
             </TouchableOpacity>
         );
+    };
+
+    const handleCreate = async (body) => {
+        try {
+            const response = await axios.post(`${apiBaseUrl}/budgets`, body, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (response.status === 201) {
+                // 201 for created
+                Alert.alert("Create New Budget Successful");
+            } else {
+                console.log("Error:", response.data.message);
+                setError(response.data.message || "Login failed");
+            }
+        } catch (error) {
+            console.log("Error details:", error.response ? error.response.data : error.message);
+            setLoading(false);
+            setError(error.response ? error.response.data.message : "An error occurred. Please try again.");
+        }
     };
 
     return (
@@ -77,12 +109,12 @@ function CreateBudget({ navigation }) {
                         style={styles.moneyText}
                         onChangeText={(value) => {
                             if (value === "") {
-                                setBudget(0);
+                                setMaxMoney(0);
                             } else {
-                                setBudget(value);
+                                setMaxMoney(value);
                             }
                         }}
-                        value={budget}
+                        value={maxMoney}
                         keyboardType="numeric"
                     />
                 </View>
@@ -103,14 +135,14 @@ function CreateBudget({ navigation }) {
                         ArrowDownIconComponent={() => <ArrowDownIcon width={32} height={32} fill="#91919F" />}
                         CloseIconComponent={() => <CloseIcon width={40} height={40} fill="#fff" />}
                         open={open}
-                        value={category}
+                        value={categoryName}
                         items={budgetCategoryList}
                         renderListItem={(props, category) => <Item {...props} />}
                         itemKey="value"
                         itemSeparator={true}
                         closeAfterSelecting={true}
                         setOpen={setOpen}
-                        setValue={setCategory}
+                        setValue={setCategoryName}
                         listMode="MODAL"
                         modalTitle="Select an category"
                         modalTitleStyle={{
@@ -175,7 +207,15 @@ function CreateBudget({ navigation }) {
                 <View style={{ alignItems: "center" }}>
                     <MainButton
                         pressHandler={() => {
-                            navigation.navigate("DetailBudget");
+                            const body = {
+                                userId: user._id,
+                                categoryName,
+                                maxMoney,
+                                isAlert,
+                                alertPoint,
+                            };
+                            handleCreate(body);
+                            // navigation.navigate("DetailBudget");
                         }}
                         buttonSize="large"
                         buttonType="primary"

@@ -22,8 +22,15 @@ export default function DetailBudget({ navigation }) {
                     setModalVisible((prev) => !prev);
                 }}
             >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalCart}>
+                <View style={{ flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(0, 0, 0, 0.16)" }}>
+                    <View
+                        style={{
+                            padding: 16,
+                            borderTopLeftRadius: 24,
+                            borderTopRightRadius: 24,
+                            backgroundColor: "#fff",
+                        }}
+                    >
                         <Text
                             style={{
                                 fontSize: 18,
@@ -167,16 +174,5 @@ const styles = StyleSheet.create({
     buttonContainer: {
         alignItems: "center",
         marginBottom: 16,
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: "flex-end",
-        backgroundColor: "rgba(0, 0, 0, 0.16)",
-    },
-    modalCart: {
-        padding: 16,
-        borderTopLeftRadius: 24,
-        borderTopRightRadius: 24,
-        backgroundColor: "#fff",
     },
 });

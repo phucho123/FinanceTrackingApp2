@@ -13,17 +13,20 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(createUserDto: CreateUserDto): Promise<{ token: string }> {
+  async signUp(createUserDto: CreateUserDto) {
     const hashedPassword = await encodePassword(createUserDto.password);
     const newUser = await this.usersService.createNewUser({
       ...createUserDto,
       password: hashedPassword,
     });
     const token = this.jwtService.sign({ id: newUser._id });
-    return { token };
+    return {
+      userId: newUser._id,
+      token,
+    };
   }
 
-  async login(loginUserDto: LoginUserDto): Promise<{ token: string }> {
+  async login(loginUserDto: LoginUserDto) {
     const { email, password } = loginUserDto;
     const findUser = await this.usersService.findByEmail(email);
     if (!findUser) {
@@ -35,6 +38,9 @@ export class AuthService {
       throw new UnauthorizedException('Invalid Email or Password!');
     }
     const token = this.jwtService.sign({ id: findUser._id });
-    return { token };
+    return {
+      userId: findUser._id,
+      token,
+    };
   }
 }

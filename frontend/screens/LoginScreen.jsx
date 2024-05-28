@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { apiBaseUrl } from "../config";
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 
 import EyeIcon from "../assets/svg/eye-regular.svg";
@@ -19,23 +19,38 @@ import SlashEyeIcon from "../assets/svg/eye-slash-regular.svg";
 import { primaryColor } from "../styles/global";
 import MainButton from "../components/button/MainButton";
 
+import { GlobalContext } from "../context/GlobalContext";
+
 const widthScreen = Dimensions.get("window").width;
 
 const LoginScreen = ({ navigation }) => {
     const [visibleEntry, setVisibleEntry] = useState(false);
-    const [checked, setChecked] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const handleSubmit = async () => {
-        setLoading(true);
-        setError("");
-        try {
-            console.log("Email:", email);
-            console.log("Password:", password);
+    const { user, setUser } = useContext(GlobalContext);
 
+    const handleUser = async (userId) => {
+        try {
+            const response = await axios.get(`${apiBaseUrl}/users/${userId}`);
+
+            if (response.status === 200) {
+                setUser(response.data);
+            } else {
+                console.log("Error:", response.data.message);
+                setError(response.data.message || "Login failed");
+            }
+        } catch (error) {
+            console.log("Error details:", error.response ? error.response.data : error.message);
+            setLoading(false);
+            setError(error.response ? error.response.data.message : "An error occurred. Please try again.");
+        }
+    };
+
+    const handleSubmit = async () => {
+        try {
             const response = await axios.post(
                 `${apiBaseUrl}/auth/login`,
                 {
@@ -52,7 +67,8 @@ const LoginScreen = ({ navigation }) => {
             setLoading(false);
             if (response.status === 201) {
                 // 201 for created
-                Alert.alert("Login Successful", `Token: ${response.data.token}`);
+                Alert.alert("Login Successful");
+                await handleUser(response.data.userId);
                 navigation.navigate("Main");
             } else {
                 console.log("Error:", response.data.message);

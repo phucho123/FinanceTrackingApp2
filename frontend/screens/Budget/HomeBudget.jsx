@@ -1,7 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, Platform, StatusBar, StyleSheet, TouchableOpacity, ScrollView, FlatList } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { primaryColor, globalStyles } from "../../styles/global";
 import ArrowLeftIcon from "../../assets/svg/arrow-left-2.svg";
@@ -11,9 +9,15 @@ import WarningIcon from "../../assets/svg/warning.svg";
 import MainButton from "../../components/button/MainButton";
 import ProgressBar from "../../components/ProgressBar";
 
-function BudgetItem({ navigation, category, spendMoney, maxMoney, color }) {
+import { GlobalContext } from "../../context/GlobalContext";
+
+function BudgetItem({ navigation, budget }) {
+    const { categoryName, maxMoney } = budget;
+    const spendMoney = -budget.spendMoney;
     const remainMoney = spendMoney < maxMoney ? maxMoney - spendMoney : 0;
     const percent = spendMoney < maxMoney ? Math.floor((spendMoney / maxMoney) * 100) : 100;
+
+    let color = "orange";
 
     return (
         <TouchableOpacity
@@ -38,7 +42,7 @@ function BudgetItem({ navigation, category, spendMoney, maxMoney, color }) {
                         }}
                     >
                         <View style={{ width: 14, height: 14, backgroundColor: color, borderRadius: 10 }}></View>
-                        <Text style={{ marginLeft: 5, fontSize: 14, fontFamily: "Inter-Medium" }}>{category}</Text>
+                        <Text style={{ marginLeft: 5, fontSize: 14, fontFamily: "Inter-Medium" }}>{categoryName}</Text>
                     </View>
                     <WarningIcon fill={remainMoney > 0 ? "none" : "orange"} />
                 </View>
@@ -57,46 +61,9 @@ function BudgetItem({ navigation, category, spendMoney, maxMoney, color }) {
     );
 }
 
-const budgetList = [
-    {
-        category: "Shopping",
-        spendMoney: 1200,
-        maxMoney: 1000,
-        color: "orange",
-    },
-    {
-        category: "Transparent",
-        spendMoney: 800,
-        maxMoney: 1000,
-        color: "blue",
-    },
-    {
-        category: "Coffe",
-        spendMoney: 30,
-        maxMoney: 100,
-        color: "grey",
-    },
-    {
-        category: "Shopping",
-        spendMoney: 1200,
-        maxMoney: 1000,
-        color: "orange",
-    },
-    {
-        category: "Transparent",
-        spendMoney: 800,
-        maxMoney: 1000,
-        color: "blue",
-    },
-    {
-        category: "Coffe",
-        spendMoney: 30,
-        maxMoney: 100,
-        color: "grey",
-    },
-];
-
 function HomeBudget({ navigation }) {
+    const { user } = useContext(GlobalContext);
+
     return (
         <View style={styles.container}>
             <View style={styles.topBar}>
@@ -109,16 +76,8 @@ function HomeBudget({ navigation }) {
                     {/* <Text style={styles.emptyText}>You don’t have a budget.</Text>
                     <Text style={styles.emptyText}>Let’s make one so you in control.</Text> */}
                     <FlatList
-                        data={budgetList}
-                        renderItem={({ item }) => (
-                            <BudgetItem
-                                navigation={navigation}
-                                category={item.category}
-                                color={item.color}
-                                spendMoney={item.spendMoney}
-                                maxMoney={item.maxMoney}
-                            />
-                        )}
+                        data={user.budgets}
+                        renderItem={({ item }) => <BudgetItem navigation={navigation} budget={item} />}
                         ItemSeparatorComponent={() => <View style={{ height: 15 }}></View>}
                     />
                 </View>

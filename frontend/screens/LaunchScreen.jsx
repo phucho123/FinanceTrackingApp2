@@ -1,11 +1,30 @@
 import { View, Image, Text, StyleSheet } from "react-native";
 import { primaryColor } from "../styles/global";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LaunchScreen({ navigation }) {
+    const [isFirstLaunch, setIsFirstLaunch] = useState();
+
     useEffect(() => {
+        AsyncStorage.getItem("alreadyLaunched").then((value) => {
+            console.log("alreadyLaunched: ", value);
+            if (!value) {
+                AsyncStorage.setItem("alreadyLaunched", "true");
+                setIsFirstLaunch(true);
+            } else {
+                setIsFirstLaunch(false);
+            }
+        });
+
+        console.log("isFirstLaunch:", isFirstLaunch);
+
         const timeoutId = setTimeout(() => {
-            navigation.navigate("HomeOnboard");
+            if (isFirstLaunch) {
+                navigation.navigate("Onboarding");
+            } else {
+                navigation.navigate("HomeOnboard");
+            }
         }, 3000);
 
         return () => clearTimeout(timeoutId);

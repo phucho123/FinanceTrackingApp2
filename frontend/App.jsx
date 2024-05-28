@@ -2,8 +2,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
-import { useCallback } from "react";
 
 import OnboardingScreen from "./screens/OnboardingScreen";
 import LoginScreen from "./screens/LoginScreen";
@@ -25,6 +23,9 @@ import DetailBudget from "./screens/Budget/DetailBudget";
 import { primaryColor } from "./styles/global";
 import HomeOnboardScreen from "./screens/HomeOnboardScreen";
 import LaunchScreen from "./screens/LaunchScreen";
+
+import { GlobalContext } from "./context/GlobalContext";
+import { useState } from "react";
 
 const Stack = createNativeStackNavigator();
 
@@ -121,93 +122,98 @@ function App() {
     //     </NavigationContainer>
     // );
 
+    const [user, setUser] = useState();
+
     return (
-        <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen name="Launch" component={LaunchScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="HomeOnboard" component={HomeOnboardScreen} options={{ headerShown: false }} />
-                <Stack.Screen
-                    name="Login"
-                    component={LoginScreen}
-                    options={{
-                        title: "Login",
-                        headerStyle: {
-                            backgroundColor: "#fff",
-                        },
-                        headerTitleAlign: "center",
-                        headerTintColor: "#000",
-                        headerTitleStyle: {
-                            fontSize: 18,
-                            color: "#000",
-                            fontWeight: "medium",
-                        },
-                        headerShadowVisible: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="SignUp"
-                    component={RegisterScreen}
-                    options={{
-                        title: "Sign Up",
-                        headerStyle: {
-                            backgroundColor: "#fff",
-                        },
-                        headerTitleAlign: "center",
-                        headerTintColor: "#000",
-                        headerTitleStyle: {
-                            fontSize: 18,
-                            color: "#000",
-                            fontWeight: "medium",
-                        },
-                        headerShadowVisible: false,
-                    }}
-                />
-                <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
-                <Stack.Screen
-                    name="CreateBudget"
-                    component={CreateBudget}
-                    options={{
-                        title: "Create Budget",
-                        headerStyle: {
-                            backgroundColor: primaryColor,
-                        },
-                        headerTitleAlign: "center",
-                        headerTintColor: "#fff",
-                        headerTitleStyle: {
-                            fontSize: 18,
-                            color: "#fff",
-                            fontFamily: "Inter-Bold",
-                        },
-                        headerShadowVisible: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="DetailBudget"
-                    component={DetailBudget}
-                    options={{
-                        headerShown: false,
-                    }}
-                />
-                <Stack.Screen
-                    name="EditBudget"
-                    component={CreateBudget}
-                    options={{
-                        title: "Edit Budget",
-                        headerStyle: {
-                            backgroundColor: primaryColor,
-                        },
-                        headerTitleAlign: "center",
-                        headerTintColor: "#fff",
-                        headerTitleStyle: {
-                            fontSize: 18,
-                            color: "#fff",
-                            fontFamily: "Inter-Bold",
-                        },
-                        headerShadowVisible: false,
-                    }}
-                />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <GlobalContext.Provider value={{ user, setUser }}>
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Screen name="Launch" component={LaunchScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="HomeOnboard" component={HomeOnboardScreen} options={{ headerShown: false }} />
+                    <Stack.Screen
+                        name="Login"
+                        component={LoginScreen}
+                        options={{
+                            title: "Login",
+                            headerStyle: {
+                                backgroundColor: "#fff",
+                            },
+                            headerTitleAlign: "center",
+                            headerTintColor: "#000",
+                            headerTitleStyle: {
+                                fontSize: 18,
+                                color: "#000",
+                                fontWeight: "medium",
+                            },
+                            headerShadowVisible: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="SignUp"
+                        component={RegisterScreen}
+                        options={{
+                            title: "Sign Up",
+                            headerStyle: {
+                                backgroundColor: "#fff",
+                            },
+                            headerTitleAlign: "center",
+                            headerTintColor: "#000",
+                            headerTitleStyle: {
+                                fontSize: 18,
+                                color: "#000",
+                                fontWeight: "medium",
+                            },
+                            headerShadowVisible: false,
+                        }}
+                    />
+                    <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
+                    <Stack.Screen
+                        name="CreateBudget"
+                        component={CreateBudget}
+                        options={{
+                            title: "Create Budget",
+                            headerStyle: {
+                                backgroundColor: primaryColor,
+                            },
+                            headerTitleAlign: "center",
+                            headerTintColor: "#fff",
+                            headerTitleStyle: {
+                                fontSize: 18,
+                                color: "#fff",
+                                fontFamily: "Inter-Bold",
+                            },
+                            headerShadowVisible: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="DetailBudget"
+                        component={DetailBudget}
+                        options={{
+                            headerShown: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="EditBudget"
+                        component={CreateBudget}
+                        options={{
+                            title: "Edit Budget",
+                            headerStyle: {
+                                backgroundColor: primaryColor,
+                            },
+                            headerTitleAlign: "center",
+                            headerTintColor: "#fff",
+                            headerTitleStyle: {
+                                fontSize: 18,
+                                color: "#fff",
+                                fontFamily: "Inter-Bold",
+                            },
+                            headerShadowVisible: false,
+                        }}
+                    />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </GlobalContext.Provider>
     );
 }
 

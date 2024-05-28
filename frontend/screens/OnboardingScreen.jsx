@@ -64,8 +64,8 @@ const OnboardingScreen = ({ navigation }) => {
                     </View>
                 );
             }}
-            onSkip={() => console.log("Skipped")}
-            onDone={() => console.log("Done")}
+            onSkip={() => navigation.navigate("HomeOnboard")}
+            onDone={() => navigation.navigate("HomeOnboard")}
             bottomButton={true}
         />
     );

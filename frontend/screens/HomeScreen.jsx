@@ -1,4 +1,4 @@
-import React, { Component, useState, Easing, useRef } from "react";
+import React, { Component, useState, useContext } from "react";
 import {
     StyleSheet,
     View,
@@ -13,9 +13,6 @@ import {
     FlatList,
     ScrollView,
 } from "react-native";
-import * as Animatable from "react-native-animatable";
-// npm install react-native-animatable
-// npm install react-native-reanimated react-native-gesture-handler
 
 import avatarImage from "../assets/images/avatar.jpg";
 import chartImage from "../assets/images/chart.png";
@@ -28,6 +25,9 @@ import ExpenseIcon from "../assets/svg/expense.svg";
 import RecurringBillIcon from "../assets/svg/recurring-bill.svg";
 import HomeIcon from "../assets/svg/home.svg";
 import RestaurantIcon from "../assets/svg/restaurant.svg";
+import CarIcon from "../assets/svg/car.svg";
+import SalaryIcon from "../assets/svg/salary.svg";
+import PlaneIcon from "../assets/svg/plane-solid.svg";
 
 import { primaryColor } from "../styles/global";
 
@@ -35,6 +35,8 @@ var { height } = Dimensions.get("window");
 var box_count = 2;
 var box_height = height / box_count;
 const widthScreen = Dimensions.get("window").width;
+
+import { GlobalContext } from "../context/GlobalContext";
 
 const monthList = [
     { name: "January", value: 1 },
@@ -99,6 +101,105 @@ export default function HomeScreen({ navigation }) {
         }).start();
         setIsExpanded(!isExpanded);
     };
+
+    const formatTime = (time) => {
+        const date = new Date(time);
+        return date.toLocaleString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+    };
+
+    const renderTransactionItem = (transaction) => {
+        const money = transaction.money;
+
+        const renderIcon = (categoryName) => {
+            switch (categoryName) {
+                case "Shopping":
+                    return (
+                        <View style={{ padding: 10, borderRadius: 16, backgroundColor: "#FCEED4" }}>
+                            <ShoppingBagIcon width={40} height={40} fill="orange" />
+                        </View>
+                    );
+                case "Subscription":
+                    return (
+                        <View style={{ padding: 10, borderRadius: 16, backgroundColor: "#EEE5FF" }}>
+                            <RecurringBillIcon width={40} height={40} fill="#7F3DFF" />
+                        </View>
+                    );
+                case "Food":
+                    return (
+                        <View style={{ padding: 10, borderRadius: 16, backgroundColor: "#FDD5D7" }}>
+                            <RestaurantIcon width={40} height={40} fill="#FD3C4A" />
+                        </View>
+                    );
+                case "Salary":
+                    return (
+                        <View style={{ padding: 10, borderRadius: 16, backgroundColor: "#CFFAEA" }}>
+                            <SalaryIcon width={40} height={40} />
+                        </View>
+                    );
+                case "Transportation":
+                    return (
+                        <View style={{ padding: 10, borderRadius: 16, backgroundColor: "#BDDCFF" }}>
+                            <CarIcon width={40} height={40} fill="#0077FF" />
+                        </View>
+                    );
+
+                case "Travel":
+                    return (
+                        <View style={{ padding: 10, borderRadius: 16, backgroundColor: "#85caed" }}>
+                            <PlaneIcon width={40} height={40} fill="#0077FF" />
+                        </View>
+                    );
+                default:
+                    return (
+                        <View style={{ padding: 10, borderRadius: 16, backgroundColor: "#ccc" }}>
+                            <Text>{categoryName}</Text>
+                        </View>
+                    );
+            }
+        };
+
+        return (
+            <TouchableOpacity
+                style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    backgroundColor: "#FCFCFC",
+                    padding: 16,
+                    borderRadius: 24,
+                    marginBottom: 10,
+                }}
+            >
+                <View style={{ flexDirection: "row" }}>
+                    {renderIcon(transaction.categoryName)}
+                    <View style={{ marginLeft: 10, justifyContent: "space-between" }}>
+                        <Text style={{ fontSize: 16, fontFamily: "Inter-Medium" }}>{transaction.categoryName}</Text>
+                        <Text style={{ fontSize: 13, fontFamily: "Inter-Medium", color: "#91919F" }}>
+                            {transaction.description}
+                        </Text>
+                    </View>
+                </View>
+                <View style={{ justifyContent: "space-between" }}>
+                    {money < 0 ? (
+                        <Text
+                            style={{ fontSize: 16, fontFamily: "Inter-SemiBold", color: "#FD3C4A", textAlign: "right" }}
+                        >{`- ${-money}`}</Text>
+                    ) : (
+                        <Text
+                            style={{ fontSize: 16, fontFamily: "Inter-SemiBold", color: "#00A86B", textAlign: "right" }}
+                        >{`+ ${money}`}</Text>
+                    )}
+                    <Text style={{ fontSize: 13, fontFamily: "Inter-Medium", color: "#91919F" }}>
+                        {formatTime(transaction.createdAt)}
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
+    const { user } = useContext(GlobalContext);
 
     return (
         <View style={styles.container}>
@@ -167,7 +268,7 @@ export default function HomeScreen({ navigation }) {
                     </TouchableOpacity>
                     <NotificationIcon fill={primaryColor} />
                 </View>
-                <Text style={styles.text}>Account Ballace</Text>
+                <Text style={styles.text}>{user.name}</Text>
                 <Text style={styles.text1}>$5500</Text>
                 <View
                     style={{
@@ -273,162 +374,11 @@ export default function HomeScreen({ navigation }) {
                 </View>
 
                 <ScrollView style={{ marginHorizontal: 16, marginBottom: 50 }}>
-                    <TouchableOpacity
-                        style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            backgroundColor: "#FCFCFC",
-                            padding: 16,
-                            borderRadius: 24,
-                            marginBottom: 10,
-                        }}
-                    >
-                        <View style={{ flexDirection: "row" }}>
-                            <View style={{ padding: 10, borderRadius: 16, backgroundColor: "#FCEED4" }}>
-                                <ShoppingBagIcon width={40} height={40} fill="orange" />
-                            </View>
-                            <View style={{ marginLeft: 10, justifyContent: "space-between" }}>
-                                <Text style={{ fontSize: 16, fontFamily: "Inter-Medium" }}>Shopping</Text>
-                                <Text style={{ fontSize: 13, fontFamily: "Inter-Medium", color: "#91919F" }}>
-                                    Buy some grocery
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={{ justifyContent: "space-between" }}>
-                            <Text style={{ fontSize: 16, fontFamily: "Inter-SemiBold", color: "#FD3C4A" }}>- $120</Text>
-                            <Text style={{ fontSize: 13, fontFamily: "Inter-Medium", color: "#91919F" }}>10:00 AM</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            backgroundColor: "#FCFCFC",
-                            padding: 16,
-                            borderRadius: 24,
-                            marginBottom: 10,
-                        }}
-                    >
-                        <View style={{ flexDirection: "row" }}>
-                            <View style={{ padding: 10, borderRadius: 16, backgroundColor: "#EEE5FF" }}>
-                                <RecurringBillIcon width={40} height={40} fill={primaryColor} />
-                            </View>
-                            <View style={{ marginLeft: 10, justifyContent: "space-between" }}>
-                                <Text style={{ fontSize: 16, fontFamily: "Inter-Medium" }}>Subscription</Text>
-                                <Text style={{ fontSize: 13, fontFamily: "Inter-Medium", color: "#91919F" }}>
-                                    Disney+ Annual..
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={{ justifyContent: "space-between" }}>
-                            <Text style={{ fontSize: 16, fontFamily: "Inter-SemiBold", color: "#FD3C4A" }}>- $80</Text>
-                            <Text style={{ fontSize: 13, fontFamily: "Inter-Medium", color: "#91919F" }}>03:30 AM</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            backgroundColor: "#FCFCFC",
-                            padding: 16,
-                            borderRadius: 24,
-                            marginBottom: 10,
-                        }}
-                    >
-                        <View style={{ flexDirection: "row" }}>
-                            <View style={{ padding: 10, borderRadius: 16, backgroundColor: "#FDD5D7" }}>
-                                <RestaurantIcon width={40} height={40} fill="#FD3C4A" />
-                            </View>
-                            <View style={{ marginLeft: 10, justifyContent: "space-between" }}>
-                                <Text style={{ fontSize: 16, fontFamily: "Inter-Medium" }}>Food</Text>
-                                <Text style={{ fontSize: 13, fontFamily: "Inter-Medium", color: "#91919F" }}>
-                                    Buy a noodle
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={{ justifyContent: "space-between" }}>
-                            <Text style={{ fontSize: 16, fontFamily: "Inter-SemiBold", color: "#FD3C4A" }}>- $32</Text>
-                            <Text style={{ fontSize: 13, fontFamily: "Inter-Medium", color: "#91919F" }}>07:30 AM</Text>
-                        </View>
-                    </TouchableOpacity>
+                    {user.transactions.map((transaction) => {
+                        return renderTransactionItem(transaction);
+                    })}
                 </ScrollView>
             </View>
-            {/* <View
-                style={{
-                    height: 73,
-                    width: widthScreen,
-                    backgroundColor: "#FCFCFC",
-                }}
-            >
-                <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-                    <View style={{ height: 50, width: 50 }}>
-                        <HomeIcon fill="black" />
-                        <Text style={{ marginLeft: 20, fontSize: 10, fontFamily: "Inter-Medium" }}>Home</Text>
-                    </View>
-                    <View style={{ height: 50, width: 50 }}>
-                        <Image
-                            source={transactionicon}
-                            style={{
-                                width: 24,
-                                height: 24,
-                                marginLeft: 10,
-                                marginTop: 10,
-                            }}
-                        ></Image>
-                        <Text style={{ marginLeft: -5, fontSize: 10, fontFamily: "Inter-Medium" }}>Transaction</Text>
-                    </View>
-
-                    <TouchableOpacity onPress={handlePress}>
-                        <Animated.View
-                            style={[
-                                styles.quickericon,
-                                {
-                                    transform: [
-                                        {
-                                            rotate: rotation.interpolate({
-                                                inputRange: [0, 45],
-                                                outputRange: ["0deg", "45deg"],
-                                            }),
-                                        },
-                                    ],
-                                },
-                            ]}
-                        >
-                            <Image
-                                source={quickericon} // Đường dẫn tới hình ảnh của bạn
-                                style={styles.quickericon2}
-                            />
-                        </Animated.View>
-                    </TouchableOpacity>
-
-                    <View style={{ height: 50, width: 50 }}>
-                        <Image
-                            source={budgeticon}
-                            style={{
-                                width: 24,
-                                height: 24,
-                                marginLeft: 10,
-                                marginTop: 10,
-                            }}
-                        ></Image>
-                        <Text style={{ marginLeft: 7, fontSize: 10, fontFamily: "Inter-Medium" }}>Budget</Text>
-                    </View>
-                    <View style={{ height: 50, width: 50 }}>
-                        <Image
-                            source={profileicon}
-                            style={{
-                                width: 24,
-                                height: 24,
-                                marginLeft: 7,
-                                marginTop: 10,
-                            }}
-                        ></Image>
-                        <Text style={{ marginLeft: 4, fontSize: 10, fontFamily: "Inter-Medium" }}>Profile</Text>
-                    </View>
-                </View>
-            </View> */}
         </View>
     );
 }
