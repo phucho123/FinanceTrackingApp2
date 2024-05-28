@@ -1,2 +1,2 @@
-const localhost='192.168.3.75';
-export const apiBaseUrl = `http://${localhost}:3000`;
+const localhost = "192.168.1.8";
+export const apiBaseUrl = `http://${localhost}:5000/v1/api`;

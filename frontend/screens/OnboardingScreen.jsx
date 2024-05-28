@@ -1,6 +1,8 @@
-import { Image, StyleSheet, Text, View, Pressable, Dimensions } from "react-native";
+import { Image, StyleSheet, Text, View, Pressable, Dimensions, TouchableOpacity } from "react-native";
 import React from "react";
 import AppIntroSlider from "react-native-app-intro-slider";
+import { primaryColor } from "../styles/global";
+import MainButton from "../components/button/MainButton";
 
 const widthScreen = Dimensions.get("window").width;
 
@@ -31,14 +33,6 @@ const renderSlide = ({ item, navigation }) => {
             <Image source={item.image} style={styles.image} />
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.text}>{item.text}</Text>
-            {/* <View style={styles.buttonsContainer}>
-                <Pressable style={{ backgroundColor: "#FFF" }} onPress={() => navigation.navigate("RegisterScreen")}>
-                    <Text style={styles.signupBtn}>Sign Up</Text>
-                </Pressable>
-                <Pressable style={{ backgroundColor: "#FFF" }} onPress={() => navigation.navigate("LoginScreen")}>
-                    <Text style={styles.loginBtn}>Login</Text>
-                </Pressable>
-            </View> */}
         </View>
     );
 };
@@ -51,22 +45,28 @@ const OnboardingScreen = ({ navigation }) => {
             dotStyle={styles.dotStyle}
             activeDotStyle={styles.activeDotStyle}
             showSkipButton={true}
+            showNextButton={true}
             renderNextButton={() => {
-                return (
-                    <View style={{}}>
-                        <Text>Next</Text>
-                    </View>
-                );
+                return <Text style={[styles.btn, styles.nextText]}>Next</Text>;
             }}
             renderSkipButton={() => {
+                return <Text style={[styles.btn, styles.skipText]}>Skip</Text>;
+            }}
+            renderDoneButton={() => {
                 return (
-                    <View>
-                        <Text>Skip</Text>
+                    <View style={{ alignItems: "center", marginBottom: 20 }}>
+                        <MainButton
+                            buttonSize="large"
+                            buttonType="primary"
+                            textType="primaryText"
+                            title="Get Started"
+                        />
                     </View>
                 );
             }}
             onSkip={() => console.log("Skipped")}
             onDone={() => console.log("Done")}
+            bottomButton={true}
         />
     );
 };
@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#FCFCFC",
     },
     image: {
-        width: 310,
-        height: 310,
+        width: 290,
+        height: 290,
         marginBottom: 25,
     },
     title: {
@@ -99,17 +99,6 @@ const styles = StyleSheet.create({
         textAlign: "center",
         color: "#91919F",
     },
-    buttonContainer: {
-        backgroundColor: "#7F3DFF",
-        borderRadius: 10,
-    },
-    button: {
-        color: "#FFFFFF",
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        fontSize: 16,
-        fontFamily: "Inter-SemiBold",
-    },
     dotStyle: {
         backgroundColor: "#EEE5FF",
         width: 8,
@@ -122,30 +111,20 @@ const styles = StyleSheet.create({
         height: 16,
         borderRadius: 50,
     },
-    signupBtn: {
-        backgroundColor: "#7F3DFF",
-        width: widthScreen - 35,
+    btn: {
         textAlign: "center",
-        color: "#FCFCFC",
-        fontFamily: "Inter-SemiBold",
-        fontSize: 18,
-        paddingVertical: 15,
-        marginVertical: 10,
-        borderRadius: 10,
+        marginHorizontal: 16,
+        padding: 15,
+        borderRadius: 16,
+        fontWeight: "bold",
+        fontSize: 16,
     },
-    loginBtn: {
-        backgroundColor: "#EEE5FF",
-        width: widthScreen - 35,
-        textAlign: "center",
-        color: "#7F3DFF",
-        fontFamily: "Inter-SemiBold",
-        fontSize: 18,
-        paddingVertical: 15,
-        borderRadius: 10,
+    nextText: {
+        color: "#fff",
+        backgroundColor: primaryColor,
     },
-    buttonsContainer: {
-        flexDirection: "column",
-        backgroundColor: "#FCFCFC",
-        marginTop: 30,
+    skipText: {
+        marginTop: 10,
+        backgroundColor: "#ccc",
     },
 });

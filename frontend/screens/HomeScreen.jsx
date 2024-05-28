@@ -81,7 +81,7 @@ function InOutCart({ color, iconComponent, title, money }) {
     );
 }
 
-export default function Home({ navigation }) {
+export default function HomeScreen({ navigation }) {
     const [selectedValue, setSelectedValue] = useState("Random");
     const [isExpanded, setIsExpanded] = useState(false);
     const [monthModalOpen, setMonthModalOpen] = useState(false);

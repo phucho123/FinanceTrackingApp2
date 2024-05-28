@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, Platform } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import Home from "../screens/Home";
+import Home from "../screens/HomeScreen";
 import Transaction from "../screens/Transaction";
 import Profile from "../screens/Profile";
 import Camera from "../screens/Camera";

@@ -23,6 +23,7 @@ import MainTabs from "./tabs/MainTabs";
 import CreateBudget from "./screens/Budget/CreateBudget";
 import DetailBudget from "./screens/Budget/DetailBudget";
 import { primaryColor } from "./styles/global";
+import HomeOnboardScreen from "./screens/HomeOnboardScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -118,7 +119,51 @@ function App() {
     //         </Stack.Navigator>
     //     </NavigationContainer>
     // );
-    return <OnboardingScreen />;
+
+    return (
+        <NavigationContainer>
+            <Stack.Navigator>
+                <Stack.Screen name="HomeOnboard" component={HomeOnboardScreen} options={{ headerShown: false }} />
+                <Stack.Screen
+                    name="Login"
+                    component={LoginScreen}
+                    options={{
+                        title: "Login",
+                        headerStyle: {
+                            backgroundColor: "#fff",
+                        },
+                        headerTitleAlign: "center",
+                        headerTintColor: "#000",
+                        headerTitleStyle: {
+                            fontSize: 18,
+                            color: "#000",
+                            fontWeight: "medium",
+                        },
+                        headerShadowVisible: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="SignUp"
+                    component={RegisterScreen}
+                    options={{
+                        title: "Sign Up",
+                        headerStyle: {
+                            backgroundColor: "#fff",
+                        },
+                        headerTitleAlign: "center",
+                        headerTintColor: "#000",
+                        headerTitleStyle: {
+                            fontSize: 18,
+                            color: "#000",
+                            fontWeight: "medium",
+                        },
+                        headerShadowVisible: false,
+                    }}
+                />
+                <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
 }
 
 export default App;
