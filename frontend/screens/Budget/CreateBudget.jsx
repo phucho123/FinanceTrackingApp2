@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { primaryColor, globalStyles } from "../../styles/global";
 import Slider from "@react-native-community/slider";
+import DropDownPicker from "react-native-dropdown-picker";
 import MainButton from "../../components/button/MainButton";
 
 import ArrowDownIcon from "../../assets/svg/arrow-down-2.svg";
@@ -31,7 +32,7 @@ const budgetCategoryList = [
     },
     {
         name: "Transporting",
-        value: "Transport",
+        value: "Transporting",
     },
     {
         name: "Travel",

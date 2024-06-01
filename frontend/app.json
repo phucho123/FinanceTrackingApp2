@@ -1,7 +1,7 @@
 {
     "expo": {
-        "name": "newapp",
-        "slug": "newapp",
+        "name": "FinTrack",
+        "slug": "FinTrack",
         "version": "1.0.0",
         "orientation": "portrait",
         "icon": "./assets/icon.png",

@@ -29,6 +29,7 @@ import ExpenseReport from "./screens/FinancialReport/ExpenseReport";
 import IncomeReport from "./screens/FinancialReport/IncomeReport";
 import BudgetReport from "./screens/FinancialReport/BudgetReport";
 import QuoteReport from "./screens/FinancialReport/QuoteReport";
+import ChartReport from "./screens/FinancialReport/ChartReport";
 
 const Stack = createNativeStackNavigator();
 
@@ -267,6 +268,13 @@ function App() {
                     <Stack.Screen
                         name="QuoteReport"
                         component={QuoteReport}
+                        options={{
+                            headerShown: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="ChartReport"
+                        component={ChartReport}
                         options={{
                             headerShown: false,
                         }}

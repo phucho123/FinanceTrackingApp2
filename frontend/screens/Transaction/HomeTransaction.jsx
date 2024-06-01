@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, Modal } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView } from "react-native";
 
 import ArrowDownIcon from "../../assets/svg/arrow-down-2.svg";
 import ArrowRightIcon from "../../assets/svg/arrow-right-2.svg";
@@ -138,7 +138,7 @@ export default function HomeTransaction({ navigation }) {
                 </View>
             </TouchableOpacity>
 
-            <View>
+            <ScrollView>
                 <Text style={{ fontSize: 18, fontWeight: "medium" }}>Today</Text>
                 {transactions &&
                     transactions.map((transaction) => {
@@ -150,7 +150,7 @@ export default function HomeTransaction({ navigation }) {
                             />
                         );
                     })}
-            </View>
+            </ScrollView>
         </View>
     );
 }
@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 32,
+        paddingBottom: 64,
         paddingHorizontal: 16,
         backgroundColor: "#fff",
     },

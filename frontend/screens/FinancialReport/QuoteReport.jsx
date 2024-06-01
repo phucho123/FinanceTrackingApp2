@@ -1,8 +1,7 @@
 import React from "react";
 import { View, ScrollView, Image, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 
-import ArrowLeftIcon from "../../assets/svg/arrow-left.svg";
-import ShoppingIcon from "../../assets/svg/shopping-bag.svg";
+import MainButton from "../../components/button/MainButton";
 import { primaryColor } from "../../styles/global";
 
 export default function QuoteReport({ route, navigation }) {
@@ -13,6 +12,33 @@ export default function QuoteReport({ route, navigation }) {
                 <View style={styles.barItem}></View>
                 <View style={styles.barItem}></View>
                 <View style={[styles.barItem, styles.activeBarItem]}></View>
+            </View>
+
+            <View style={{ flex: 1, paddingHorizontal: 16, justifyContent: "space-around" }}>
+                <View>
+                    <Text style={{ fontSize: 32, fontWeight: "bold", color: "#fff" }}>
+                        “Financial freedom is freedom from fear.”
+                    </Text>
+                    <Text style={{ fontSize: 24, fontWeight: "bold", color: "#fff" }}>-Robert Kiyosaki</Text>
+                </View>
+                <View style={{ alignItems: "center" }}>
+                    <MainButton
+                        buttonSize="large"
+                        buttonType="secondary"
+                        textType="secondaryText"
+                        title="See the full detail"
+                        pressHandler={() => navigation.navigate("ChartReport")}
+                    />
+                    <View style={{ marginTop: 16 }}>
+                        <MainButton
+                            buttonSize="large"
+                            buttonType="secondary"
+                            textType="secondaryText"
+                            title="Done"
+                            pressHandler={() => navigation.navigate("HomeTransaction")}
+                        />
+                    </View>
+                </View>
             </View>
         </View>
     );
