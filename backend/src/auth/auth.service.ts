@@ -26,12 +26,12 @@ export class AuthService {
     const { email, password } = loginUserDto;
     const findUser = await this.usersService.findByEmail(email);
     if (!findUser) {
-      throw new UnauthorizedException('Invalid Email or Password!');
+      throw new UnauthorizedException('Email or Password is incorrect!');
     }
 
     const isPasswordMatched = comparePasswords(password, findUser.password);
     if (!isPasswordMatched) {
-      throw new UnauthorizedException('Invalid Email or Password!');
+      throw new UnauthorizedException('Email or Password is incorrect');
     }
     const token = this.jwtService.sign({ id: findUser._id });
     return {

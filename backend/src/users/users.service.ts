@@ -15,7 +15,15 @@ export class UsersService {
   }
 
   async createNewUser(createUserDto: CreateUserDto) {
+    const findUser = await this.findByEmail(createUserDto.email);
+    if (findUser)
+      throw new HttpException(
+        'This email is already use, please enter another email!',
+        400,
+      );
+
     const hashedPassword = await encodePassword(createUserDto.password);
+
     const createdUser = new this.userModel({
       ...createUserDto,
       password: hashedPassword,
@@ -30,7 +38,6 @@ export class UsersService {
 
   async findByEmail(email: string) {
     const user = await this.userModel.findOne({ email });
-    if (!user) throw new HttpException('User Not Found', 404);
     return user;
   }
 

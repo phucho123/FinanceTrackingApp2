@@ -15,6 +15,14 @@ const formatTime = (time) => {
     });
 };
 
+const formatDate = (time) => {
+    const date = new Date(time);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+    const dateDate = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+    return `${year}-${month}-${dateDate}`;
+};
+
 export default function TransactionItem({ prevScreen, transaction, navigation }) {
     const { money, type } = transaction;
     const color = type === "Income" ? "#00A86B" : "#FD3C4A";
@@ -88,13 +96,18 @@ export default function TransactionItem({ prevScreen, transaction, navigation })
                     </Text>
                 </View>
             </View>
-            <View style={{ justifyContent: "space-between" }}>
+            <View style={{ alignItems: "flex-end", justifyContent: "space-between" }}>
                 <Text style={{ fontSize: 16, fontFamily: "Inter-SemiBold", color: color, textAlign: "right" }}>
                     {type === "Income" ? `+ $${money}` : `- $${money}`}
                 </Text>
-                <Text style={{ fontSize: 13, fontFamily: "Inter-Medium", color: "#91919F" }}>
-                    {formatTime(transaction.createdAt)}
-                </Text>
+                <View style={{ alignItems: "flex-end" }}>
+                    <Text style={{ fontSize: 13, fontFamily: "Inter-Medium", color: "#91919F" }}>
+                        {formatTime(transaction.createdAt)}
+                    </Text>
+                    <Text style={{ fontSize: 13, fontFamily: "Inter-Medium", color: "#91919F" }}>
+                        {formatDate(transaction.createdAt)}
+                    </Text>
+                </View>
             </View>
         </TouchableOpacity>
     );

@@ -1,7 +1,7 @@
-/* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
+import { ValidationPipe } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -17,6 +17,7 @@ async function bootstrap() {
     credentials: false, // Enable if you need to include cookies in the requests
   });
 
+  app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('/v1/api');
 
   await app.listen(5001);

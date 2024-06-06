@@ -1,28 +1,16 @@
-import {
-    Image,
-    Pressable,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
-    Dimensions,
-    ActivityIndicator,
-    Alert,
-} from "react-native";
+import { Modal, Pressable, StyleSheet, Text, TextInput, View, Dimensions, TouchableOpacity } from "react-native";
 import axios from "axios";
 
 import React, { useState, useContext } from "react";
-import Eye from "../assets/eye.png";
 import CheckBox from "expo-checkbox";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Header from "../components/Header";
-import registerLogo from "../assets/register.png";
 import { apiBaseUrl } from "../config";
+import { primaryColor } from "../styles/global";
 
 import EyeIcon from "../assets/svg/eye-regular.svg";
 import SlashEyeIcon from "../assets/svg/eye-slash-regular.svg";
+import ErrorIcon from "../assets/svg/circle-exclamation-solid.svg";
+
 import MainButton from "../components/button/MainButton";
-import LoadingModal from "../components/LoadingModal";
 import { GlobalContext } from "../context/GlobalContext";
 
 const widthScreen = Dimensions.get("window").width;
@@ -34,6 +22,7 @@ const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [showErrorModal, setShowErrorModal] = useState(false);
 
     const { setUser, setLoading } = useContext(GlobalContext);
 
@@ -55,8 +44,6 @@ const RegisterScreen = ({ navigation }) => {
     };
 
     const handleSignUp = async () => {
-        setError("");
-
         try {
             setLoading(true);
             const response = await axios.post(
@@ -75,8 +62,6 @@ const RegisterScreen = ({ navigation }) => {
 
             setLoading(false);
             if (response.status === 201) {
-                // 201 for created
-                // Alert.alert("SignUp Successful");
                 await handleUser(response.data.userId);
                 navigation.navigate("Main");
             } else {
@@ -84,13 +69,70 @@ const RegisterScreen = ({ navigation }) => {
                 setError(response.data.message || "Registration failed");
             }
         } catch (error) {
+            const { message, statusCode } = error.response.data;
             console.log("Error details:", error.response ? error.response.data : error.message);
             setLoading(false);
-            setError(error.response ? error.response.data.message : "An error occurred. Please try again.");
+
+            Array.isArray(message) ? setError(message[0]) : setError(message);
+
+            setShowErrorModal(true);
         }
     };
+
     return (
         <View style={styles.container}>
+            {/* Error Modal */}
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={showErrorModal}
+                onRequestClose={() => {
+                    console.log("Modal has been closed.");
+                    setShowErrorModal((prev) => !prev);
+                }}
+            >
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    }}
+                >
+                    <View
+                        style={{
+                            backgroundColor: "#fff",
+                            width: 330,
+                            alignItems: "center",
+                            paddingTop: 20,
+                            borderRadius: 16,
+                        }}
+                    >
+                        <ErrorIcon fill="red" width={64} height={64} />
+                        <Text style={{ fontSize: 14, fontWeight: "medium", marginVertical: 10, textAlign: "center" }}>
+                            {error}
+                        </Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                setShowErrorModal(false);
+                            }}
+                        >
+                            <View style={{ borderTopWidth: 1, borderColor: "#ccc", width: 320, paddingVertical: 10 }}>
+                                <Text
+                                    style={{
+                                        color: primaryColor,
+                                        fontWeight: "bold",
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    OK
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
             <TextInput
                 style={styles.textInput}
                 placeholder="Name"
@@ -126,13 +168,12 @@ const RegisterScreen = ({ navigation }) => {
                 style={{
                     flexDirection: "row",
                     alignItems: "center",
-                    gap: 10,
-                    paddingRight: 30,
+                    marginTop: 16,
                 }}
             >
                 <CheckBox value={checked} onValueChange={setChecked} tintColors={{ true: "#7F3DFF" }} />
-                <Text style={{ color: "#000", fontFamily: "Inter-Medium" }}>
-                    By signing up, you agre to the{" "}
+                <Text style={{ color: "#000", fontFamily: "Inter-Medium", marginLeft: 10 }}>
+                    By signing up, you agree to the{" "}
                     <Text style={{ color: "#7F3DFF", fontFamily: "Inter-Medium" }}>
                         Terms of Service and Privacy Policy
                     </Text>
@@ -145,7 +186,14 @@ const RegisterScreen = ({ navigation }) => {
                     buttonType="primary"
                     textType="primaryText"
                     title="Sign Up"
-                    pressHandler={handleSignUp}
+                    pressHandler={() => {
+                        if (!checked) {
+                            setError("Please agree the Policy before signing up!");
+                            setShowErrorModal(true);
+                        } else {
+                            handleSignUp();
+                        }
+                    }}
                 />
             </View>
             <View

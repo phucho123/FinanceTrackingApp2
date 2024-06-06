@@ -4,8 +4,6 @@ import AppIntroSlider from "react-native-app-intro-slider";
 import { primaryColor } from "../styles/global";
 import MainButton from "../components/button/MainButton";
 
-const widthScreen = Dimensions.get("window").width;
-
 const slides = [
     {
         key: "slide1",
@@ -37,7 +35,7 @@ const renderSlide = ({ item, navigation }) => {
     );
 };
 
-const OnboardingScreen = ({ navigation }) => {
+export default function OnboardingScreen({ navigation }) {
     return (
         <AppIntroSlider
             data={slides}
@@ -60,6 +58,7 @@ const OnboardingScreen = ({ navigation }) => {
                             buttonType="primary"
                             textType="primaryText"
                             title="Get Started"
+                            pressHandler={() => navigation.navigate("HomeOnboard")}
                         />
                     </View>
                 );
@@ -69,9 +68,7 @@ const OnboardingScreen = ({ navigation }) => {
             bottomButton={true}
         />
     );
-};
-
-export default OnboardingScreen;
+}
 
 const styles = StyleSheet.create({
     slideContainer: {

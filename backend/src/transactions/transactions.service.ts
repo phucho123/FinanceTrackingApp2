@@ -22,7 +22,8 @@ export class TransactionsService {
   }
 
   async getAllTransaction(query) {
-    const { sortMoney, sortTime, ...whereObj } = query;
+    const { sortMoney, sortTime, limit, filterTime, ...rest } = query;
+
     const sortObj = sortMoney
       ? sortTime
         ? { money: sortMoney, createdAt: sortTime }
@@ -30,6 +31,63 @@ export class TransactionsService {
       : sortTime
         ? { createdAt: sortTime }
         : {};
+
+    if (!filterTime) {
+      return await this.transactionModel.find(rest).sort(sortObj).limit(limit);
+    } else {
+      const date = new Date();
+      const currentYear = date.getFullYear();
+      const currentMonth = date.getMonth();
+      const dateData = date.getDate();
+      const currentDay = date.getDay();
+
+      console.log(currentYear, currentMonth, dateData, currentDay);
+
+      const whereObj = {
+        ...rest,
+        createdAt: {
+          $gte: '',
+          $lte: '',
+        },
+      };
+
+      switch (filterTime) {
+        case 'Today':
+          whereObj.createdAt = {
+            $gte: new Date(currentYear, currentMonth, dateData),
+            $lt: new Date(currentYear, currentMonth, dateData + 1),
+          };
+          break;
+        case 'Week':
+          whereObj.createdAt = {
+            $gte: new Date(
+              currentYear,
+              currentMonth,
+              dateData - currentDay + 2,
+            ),
+            $lt: new Date(currentYear, currentMonth, dateData + 9 - currentDay),
+          };
+          break;
+        case 'Month':
+          whereObj.createdAt = {
+            $gte: new Date(currentYear, currentMonth),
+            $lt: new Date(currentYear, currentMonth + 1),
+          };
+          break;
+        case 'Year':
+          whereObj.createdAt = {
+            $gte: new Date(currentYear, 0),
+            $lt: new Date(currentYear + 1, 0),
+          };
+          break;
+      }
+
+      console.log(whereObj);
+      return await this.transactionModel
+        .find(whereObj)
+        .sort(sortObj)
+        .limit(limit);
+    }
 
     // const resPerPage = 3;
     // const currentPage = Number(query.page) || 1;
@@ -48,7 +106,14 @@ export class TransactionsService {
     //   .limit(resPerPage)
     //   .skip(skip);
 
-    return await this.transactionModel.find(whereObj).sort(sortObj);
+    // if (limit) {
+    //   return await this.transactionModel
+    //     .find(whereObj)
+    //     .sort(sortObj)
+    //     .limit(limit);
+    // } else {
+    //   return await this.transactionModel.find(whereObj).sort(sortObj);
+    // }
   }
 
   getTransactionById(id: string) {

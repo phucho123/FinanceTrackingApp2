@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from "react-nati
 import axios from "axios";
 
 import TransactionItem from "../../components/TransactionItem";
+import CategoryCard from "../../components/CategoryCard";
 
 import ArrowLeftIcon from "../../assets/svg/arrow-left.svg";
 import ArrowDownIcon from "../../assets/svg/arrow-down-2.svg";
@@ -15,10 +16,12 @@ import { GlobalContext } from "../../context/GlobalContext";
 import { apiBaseUrl } from "../../config";
 
 import { BarChart, LineChart, LineChartBicolor, PieChart, PopulationPyramid } from "react-native-gifted-charts";
+import SelectDropdown from "react-native-select-dropdown";
 
 export default function ChartReport({ route, navigation }) {
     const [chartType, setChartType] = useState("LineChart");
     const [transactionType, setTransactionType] = useState("Expense");
+    const [categoryType, setCategoryType] = useState("Category");
     const [transactionList, setTransactionList] = useState();
 
     const lineData = [
@@ -41,6 +44,12 @@ export default function ChartReport({ route, navigation }) {
     ];
 
     const { user, setLoading } = useContext(GlobalContext);
+
+    const calcMoneyTotal = (transactionList) => {
+        return transactionList.reduce((result, transaction) => {
+            return result + transaction.money;
+        }, 0);
+    };
 
     const renderChartSelectItem = (type) => {
         const iconColor = type === chartType ? "#fff" : primaryColor;
@@ -112,7 +121,7 @@ export default function ChartReport({ route, navigation }) {
 
     const data = [
         {
-            value: 0,
+            value: 132,
         },
         {
             value: 100,
@@ -127,10 +136,10 @@ export default function ChartReport({ route, navigation }) {
             value: 290,
         },
         {
-            value: 410,
+            value: 103,
         },
         {
-            value: 440,
+            value: 200,
         },
         {
             value: 300,
@@ -183,7 +192,11 @@ export default function ChartReport({ route, navigation }) {
                     </View>
                 </View>
 
-                <Text style={{ marginVertical: 16, fontSize: 32, fontWeight: "bold", color: "#000" }}>$332</Text>
+                {chartType === "LineChart" && transactionList && (
+                    <Text
+                        style={{ marginVertical: 16, fontSize: 32, fontWeight: "bold", color: "#000" }}
+                    >{`$ ${calcMoneyTotal(transactionList)}`}</Text>
+                )}
             </View>
 
             <View style={{ alignItems: "center" }}>
@@ -191,7 +204,6 @@ export default function ChartReport({ route, navigation }) {
                     <LineChart
                         thickness={6}
                         color={primaryColor}
-                        maxValue={600}
                         noOfSections={3}
                         areaChart
                         data={data}
@@ -202,10 +214,11 @@ export default function ChartReport({ route, navigation }) {
                         endOpacity={0}
                         spacing={32}
                         initialSpacing={10}
-                        yAxisColor="#fff"
-                        xAxisColor="#fff"
-                        hideAxesAndRules
+                        yAxisColor={primaryColor}
+                        xAxisColor={primaryColor}
+                        // hideAxesAndRules
                         hideDataPoints
+                        height={180}
                     />
                 ) : (
                     <PieChart
@@ -220,11 +233,16 @@ export default function ChartReport({ route, navigation }) {
                         textColor="white"
                         textSize={16}
                         fontWeight="bold"
-                        strokeWidth={10}
-                        strokeColor="#333"
-                        innerCircleBorderWidth={10}
-                        innerCircleBorderColor="#333"
                         showGradient
+                        centerLabelComponent={() => {
+                            return (
+                                <Text style={{ fontSize: 32, fontWeight: "bold", color: "#000" }}>{`$${calcMoneyTotal(
+                                    transactionList
+                                )}`}</Text>
+                            );
+                        }}
+                        height={180}
+                        innerRadius={100}
                     />
                 )}
             </View>
@@ -243,12 +261,35 @@ export default function ChartReport({ route, navigation }) {
                         justifyContent: "space-between",
                     }}
                 >
-                    <TouchableOpacity>
-                        <View style={[styles.timeSelector]}>
-                            <ArrowDownIcon width={24} height={24} fill={primaryColor} />
-                            <Text style={{ marginLeft: 5, fontSize: 14, fontWeight: "bold" }}>Category</Text>
-                        </View>
-                    </TouchableOpacity>
+                    <SelectDropdown
+                        data={["Transaction", "Category"]}
+                        onSelect={(selectedItem, index) => {
+                            console.log(selectedItem, index);
+                            setCategoryType(selectedItem);
+                        }}
+                        renderButton={(selectedItem, isOpened) => {
+                            return (
+                                <View style={styles.timeSelector}>
+                                    <ArrowDownIcon width={24} height={24} fill={primaryColor} />
+                                    <Text style={{ fontSize: 14, fontWeight: "bold" }}>{categoryType}</Text>
+                                </View>
+                            );
+                        }}
+                        renderItem={(item, index, isSelected) => {
+                            return (
+                                <View
+                                    style={{
+                                        ...styles.dropdownItemStyle,
+                                        ...(isSelected && { backgroundColor: "#D2D9DF" }),
+                                    }}
+                                >
+                                    <Text style={styles.dropdownItemTxtStyle}>{item}</Text>
+                                </View>
+                            );
+                        }}
+                        showsVerticalScrollIndicator={false}
+                        dropdownStyle={styles.dropdownMenuStyle}
+                    />
                     <TouchableOpacity>
                         <View style={{ padding: 5, borderWidth: 1, borderColor: "#ccc", borderRadius: 10 }}>
                             <SortIcon fill="#000" />
@@ -259,6 +300,9 @@ export default function ChartReport({ route, navigation }) {
                 {transactionList && (
                     <ScrollView style={{ height: 100, marginTop: 16 }}>
                         {transactionList.map((item) => {
+                            if (categoryType === "Category") {
+                                return <CategoryCard transaction={item} />;
+                            }
                             return (
                                 <TransactionItem prevScreen="ChartReport" transaction={item} navigation={navigation} />
                             );
@@ -308,33 +352,14 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginTop: 10,
     },
-    block1: {
-        // width: "1000px",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
+    dropdownMenuStyle: {
+        borderRadius: 10,
+        overflow: "hidden",
     },
-    block2: {
-        marginBottom: 8,
+    dropdownItemStyle: {
+        padding: 10,
     },
-    block3: {
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "row",
-        alignContent: "center",
-    },
-    block4: {
-        marginTop: 8,
-    },
-    block5: {
-        marginTop: 8,
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 4,
-    },
-
-    changeGraphTypeButton: {
-        flexDirection: "row",
-        gap: 2,
+    dropdownItemTextStyle: {
+        fontSize: 14,
     },
 });

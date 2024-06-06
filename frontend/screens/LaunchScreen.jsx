@@ -7,24 +7,26 @@ export default function LaunchScreen({ navigation }) {
     const [isFirstLaunch, setIsFirstLaunch] = useState();
 
     useEffect(() => {
-        AsyncStorage.getItem("alreadyLaunched").then((value) => {
-            console.log("alreadyLaunched: ", value);
-            if (!value) {
-                AsyncStorage.setItem("alreadyLaunched", "true");
-                setIsFirstLaunch(true);
-            } else {
-                setIsFirstLaunch(false);
-            }
-        });
+        // AsyncStorage.getItem("alreadyLaunched").then((value) => {
+        //     console.log("alreadyLaunched: ", value);
+        //     if (!value) {
+        //         AsyncStorage.setItem("alreadyLaunched", "true");
+        //         setIsFirstLaunch(true);
+        //     } else {
+        //         setIsFirstLaunch(false);
+        //     }
+        // });
 
-        console.log("isFirstLaunch:", isFirstLaunch);
+        // console.log("isFirstLaunch:", isFirstLaunch);
 
         const timeoutId = setTimeout(() => {
-            if (isFirstLaunch) {
-                navigation.navigate("Onboarding");
-            } else {
-                navigation.navigate("HomeOnboard");
-            }
+            // if (isFirstLaunch) {
+            //     navigation.navigate("Onboarding");
+            // } else {
+            //     navigation.navigate("HomeOnboard");
+            // }
+
+            navigation.navigate("Onboarding");
         }, 3000);
 
         return () => clearTimeout(timeoutId);

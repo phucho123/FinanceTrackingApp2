@@ -83,19 +83,19 @@ function InOutCart({ color, iconComponent, title, money }) {
 
 export default function HomeScreen({ navigation }) {
     const [selectedValue, setSelectedValue] = useState("Random");
-    const [isExpanded, setIsExpanded] = useState(false);
     const [monthModalOpen, setMonthModalOpen] = useState(false);
-    const rotation = new Animated.Value(0); // Khởi tạo giá trị ban đầu của rotation
     const [modalVisible, setModalVisible] = useState(false);
-    const [selectedTime, setSelectedTime] = useState(timeList[0]);
 
     const { user, setLoading, callTransactions, setCallTransactions } = useContext(GlobalContext);
     const [transactions, setTransactions] = useState();
 
+    const [transactionWithTime, setTransactionWithTime] = useState();
+    const [selectedTime, setSelectedTime] = useState(timeList[0]);
+
     const getTransactions = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${apiBaseUrl}/transactions?userId=${user._id}`);
+            const response = await axios.get(`${apiBaseUrl}/transactions?userId=${user._id}&sortTime=desc`);
             if (response.status === 200) {
                 setTransactions(response.data);
                 setLoading(false);
@@ -110,20 +110,33 @@ export default function HomeScreen({ navigation }) {
         }
     };
 
+    const getTransactionWithTime = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get(
+                `${apiBaseUrl}/transactions?userId=${user._id}&sortTime=desc&filterTime=${selectedTime}&limit=5`
+            );
+            if (response.status === 200) {
+                setTransactionWithTime(response.data);
+                setLoading(false);
+            } else {
+                console.log("Error:", response.data.message);
+                setError(response.data.message || "Get Transactions Filtered Width Time failed");
+            }
+        } catch (error) {
+            console.log("Error details:", error.response ? error.response.data : error.message);
+            setLoading(false);
+            setError(error.response ? error.response.data.message : "An error occurred. Please try again.");
+        }
+    };
+
     useEffect(() => {
         getTransactions();
     }, [callTransactions]);
 
-    const handlePress = () => {
-        const toValue2 = isExpanded ? -45 : 45;
-
-        Animated.timing(rotation, {
-            toValue: toValue2,
-            duration: 500,
-            useNativeDriver: true,
-        }).start();
-        setIsExpanded(!isExpanded);
-    };
+    useEffect(() => {
+        getTransactionWithTime();
+    }, [selectedTime, callTransactions]);
 
     return (
         <View style={styles.container}>
@@ -212,13 +225,17 @@ export default function HomeScreen({ navigation }) {
                                 title="Income"
                                 color="#00A86B"
                                 iconComponent={<IncomeIcon fill="#00A86B" />}
-                                money={5000}
+                                money={transactions.reduce((result, transaction) => {
+                                    return transaction.type === "Income" ? result + transaction.money : result;
+                                }, 0)}
                             />
                             <InOutCart
                                 title="Expenses"
                                 color="#FD3C4A"
                                 iconComponent={<ExpenseIcon fill="#FD3C4A" />}
-                                money={1200}
+                                money={transactions.reduce((result, transaction) => {
+                                    return transaction.type === "Expense" ? result + transaction.money : result;
+                                }, 0)}
                             />
                         </View>
                     </View>
@@ -304,16 +321,17 @@ export default function HomeScreen({ navigation }) {
                             </View>
                         </View>
 
-                        <ScrollView style={{ marginHorizontal: 16, marginBottom: 50 }}>
-                            {transactions.map((transaction) => {
-                                return (
-                                    <TransactionItem
-                                        prevScreen="Home"
-                                        transaction={transaction}
-                                        navigation={navigation}
-                                    />
-                                );
-                            })}
+                        <ScrollView style={{ height: 300, marginHorizontal: 16, marginBottom: 50 }}>
+                            {transactionWithTime &&
+                                transactionWithTime.map((transaction) => {
+                                    return (
+                                        <TransactionItem
+                                            prevScreen="Home"
+                                            transaction={transaction}
+                                            navigation={navigation}
+                                        />
+                                    );
+                                })}
                         </ScrollView>
                     </View>
                 </>
@@ -383,7 +401,7 @@ const styles = StyleSheet.create({
 
     box2: {
         backgroundColor: "#ffffff",
-        height: height - 312 - 40,
+        marginBottom: 64,
     },
     timeContainer: {
         borderRadius: 16,

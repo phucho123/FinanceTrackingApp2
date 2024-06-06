@@ -33,6 +33,7 @@ export default function CreateTransaction({ route, navigation }) {
     const handleCreate = async (body) => {
         try {
             setLoading(true);
+            console.log(body);
             const response = await axios.post(`${apiBaseUrl}/transactions`, body, {
                 headers: {
                     "Content-Type": "application/json",
@@ -271,7 +272,14 @@ export default function CreateTransaction({ route, navigation }) {
                         textType="primaryText"
                         title="Continue"
                         pressHandler={() => {
-                            handleCreate({ categoryName, userId: user._id, title, description, money, type: type });
+                            handleCreate({
+                                categoryName,
+                                userId: user._id,
+                                title,
+                                description,
+                                money: parseInt(money),
+                                type: type,
+                            });
                         }}
                     />
                 </View>

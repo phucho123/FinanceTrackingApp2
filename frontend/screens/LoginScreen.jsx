@@ -9,6 +9,7 @@ import {
     StyleSheet,
     Alert,
     Modal,
+    TouchableOpacity,
 } from "react-native";
 import { apiBaseUrl } from "../config";
 
@@ -17,9 +18,10 @@ import axios from "axios";
 
 import EyeIcon from "../assets/svg/eye-regular.svg";
 import SlashEyeIcon from "../assets/svg/eye-slash-regular.svg";
+import ErrorIcon from "../assets/svg/circle-exclamation-solid.svg";
+
 import { primaryColor } from "../styles/global";
 import MainButton from "../components/button/MainButton";
-import LoadingModal from "../components/LoadingModal";
 
 import { GlobalContext } from "../context/GlobalContext";
 
@@ -30,6 +32,7 @@ const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [showErrorModal, setShowErrorModal] = useState(false);
 
     const { setUser, setLoading } = useContext(GlobalContext);
 
@@ -77,14 +80,69 @@ const LoginScreen = ({ navigation }) => {
                 setError(response.data.message || "Login failed");
             }
         } catch (error) {
+            const { message, statusCode } = error.response.data;
             console.log("Error details:", error.response ? error.response.data : error.message);
             setLoading(false);
-            setError(error.response ? error.response.data.message : "An error occurred. Please try again.");
+
+            Array.isArray(message) ? setError(message[0]) : setError(message);
+
+            setShowErrorModal(true);
+            // setError(error.response ? error.response.data.message : "An error occurred. Please try again.");
         }
     };
 
     return (
         <View style={styles.container}>
+            {/* Error Modal */}
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={showErrorModal}
+                onRequestClose={() => {
+                    console.log("Modal has been closed.");
+                    setShowErrorModal((prev) => !prev);
+                }}
+            >
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    }}
+                >
+                    <View
+                        style={{
+                            backgroundColor: "#fff",
+                            width: 330,
+                            alignItems: "center",
+                            paddingTop: 20,
+                            borderRadius: 16,
+                        }}
+                    >
+                        <ErrorIcon fill="red" width={64} height={64} />
+                        <Text style={{ fontSize: 14, fontWeight: "medium", marginVertical: 10 }}>{error}</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                setShowErrorModal(false);
+                            }}
+                        >
+                            <View style={{ borderTopWidth: 1, borderColor: "#ccc", width: 320, paddingVertical: 10 }}>
+                                <Text
+                                    style={{
+                                        color: primaryColor,
+                                        fontWeight: "bold",
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    OK
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
             <View style={styles.formContainer}>
                 <TextInput
                     style={styles.textInput}

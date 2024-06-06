@@ -11,17 +11,19 @@ import axios from "axios";
 import { apiBaseUrl } from "../../config";
 import { GlobalContext } from "../../context/GlobalContext";
 import { useState, useContext, useEffect } from "react";
+import SelectDropdown from "react-native-select-dropdown";
 
 export default function HomeTransaction({ navigation }) {
     const [filterModal, setFilterModal] = useState(false);
     const [transactions, setTransactions] = useState();
+    const [filterTime, setFilterTime] = useState("Month");
 
     const { user, setLoading, callTransactions, setCallTransactions } = useContext(GlobalContext);
 
     const getTransactions = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${apiBaseUrl}/transactions?userId=${user._id}`);
+            const response = await axios.get(`${apiBaseUrl}/transactions?userId=${user._id}&filterTime=${filterTime}`);
             if (response.status === 200) {
                 setTransactions(response.data);
                 setLoading(false);
@@ -38,7 +40,7 @@ export default function HomeTransaction({ navigation }) {
 
     useEffect(() => {
         getTransactions();
-    }, [callTransactions]);
+    }, [callTransactions, filterTime]);
 
     return (
         <View style={styles.container}>
@@ -118,12 +120,39 @@ export default function HomeTransaction({ navigation }) {
             </Modal>
 
             <View style={styles.flexRowBetween}>
-                <TouchableOpacity>
-                    <View style={[styles.timeSelector, styles.flexRowBetween]}>
-                        <ArrowDownIcon width={24} height={24} fill={primaryColor} />
-                        <Text style={{ marginLeft: 5, fontSize: 14, fontWeight: "bold" }}>Month</Text>
-                    </View>
-                </TouchableOpacity>
+                <SelectDropdown
+                    data={["Today", "Week", "Month", "Year"]}
+                    onSelect={(selectedItem, index) => {
+                        console.log(selectedItem, index);
+                        setFilterTime(selectedItem);
+                    }}
+                    renderButton={(selectedItem, isOpened) => {
+                        return (
+                            <TouchableOpacity>
+                                <View style={[styles.timeSelector, styles.flexRowBetween]}>
+                                    <ArrowDownIcon width={24} height={24} fill={primaryColor} />
+                                    <Text style={{ marginLeft: 5, fontSize: 14, fontWeight: "bold" }}>
+                                        {filterTime}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    }}
+                    renderItem={(item, index, isSelected) => {
+                        return (
+                            <View
+                                style={{
+                                    ...styles.dropdownItemStyle,
+                                    ...(isSelected && { backgroundColor: "#D2D9DF" }),
+                                }}
+                            >
+                                <Text style={styles.dropdownItemTxtStyle}>{item}</Text>
+                            </View>
+                        );
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    dropdownStyle={styles.dropdownMenuStyle}
+                />
                 <TouchableOpacity onPress={() => setFilterModal(true)}>
                     <View style={styles.filterBtn}>
                         <FilterIcon width={24} height={24} fill="#000" />
@@ -139,7 +168,6 @@ export default function HomeTransaction({ navigation }) {
             </TouchableOpacity>
 
             <ScrollView>
-                <Text style={{ fontSize: 18, fontWeight: "medium" }}>Today</Text>
                 {transactions &&
                     transactions.map((transaction) => {
                         return (
@@ -223,5 +251,12 @@ const styles = StyleSheet.create({
     applyBtn: {
         alignItems: "center",
         marginVertical: 18,
+    },
+    dropdownMenuStyle: {
+        borderRadius: 10,
+        overflow: "hidden",
+    },
+    dropdownItemStyle: {
+        padding: 10,
     },
 });

@@ -3,6 +3,7 @@ import { Text, TouchableOpacity, View, StyleSheet, Image, ScrollView, Modal } fr
 import ArrowLeftIcon from "../../assets/svg/arrow-left.svg";
 import TrashIcon from "../../assets/svg/trash.svg";
 import SuccessIcon from "../../assets/svg/success.svg";
+import CloseIcon from "../../assets/svg/close.svg";
 
 import MainButton from "../../components/button/MainButton";
 import { useState, useContext, useEffect } from "react";
@@ -44,6 +45,8 @@ export default function DetailTransaction({ route, navigation }) {
     const [transaction, setTransaction] = useState();
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [openSuccessModal, setOpenSuccessModal] = useState(false);
+    const [openImageModal, setOpenImageModal] = useState(false);
+
     const { prevScreen, id } = route.params;
     const { setLoading, setCallTransactions } = useContext(GlobalContext);
 
@@ -185,12 +188,14 @@ export default function DetailTransaction({ route, navigation }) {
                             <View style={{ marginTop: 15 }}>
                                 <Text style={{ fontSize: 16, fontWeight: "bold", color: "#91919F" }}>Attachment</Text>
                                 {imageUrl ? (
-                                    <Image
-                                        style={{ marginTop: 10, width: "100%", height: 120, borderRadius: 16 }}
-                                        source={{
-                                            uri: imageUrl,
-                                        }}
-                                    />
+                                    <TouchableOpacity onPress={() => setOpenImageModal(true)}>
+                                        <Image
+                                            style={{ marginTop: 10, width: "100%", height: 120, borderRadius: 16 }}
+                                            source={{
+                                                uri: imageUrl,
+                                            }}
+                                        />
+                                    </TouchableOpacity>
                                 ) : (
                                     <Text>No Image</Text>
                                 )}
@@ -332,6 +337,45 @@ export default function DetailTransaction({ route, navigation }) {
                                 </Text>
                             </View>
                         </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
+            {/* Image Modal */}
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={openImageModal}
+                onRequestClose={() => {
+                    console.log("Modal has been closed.");
+                    setOpenImageModal((prev) => !prev);
+                }}
+            >
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    }}
+                >
+                    <View>
+                        <TouchableOpacity onPress={() => setOpenImageModal(false)}>
+                            <View style={{ alignItems: "flex-end" }}>
+                                <View style={{ padding: 10, backgroundColor: "#fff", borderRadius: 24 }}>
+                                    <CloseIcon fill="#000" />
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                        {transaction && (
+                            <Image
+                                resizeMode="contain"
+                                width={280}
+                                height={500}
+                                source={{ uri: transaction.imageUrl }}
+                                style={{ marginTop: 16 }}
+                            />
+                        )}
                     </View>
                 </View>
             </Modal>

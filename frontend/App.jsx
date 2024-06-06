@@ -1,17 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Text, View } from "react-native";
 
 import { useFonts } from "expo-font";
 
 import OnboardingScreen from "./screens/OnboardingScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
-import IncomeTransaction from "./screens/FinancialReport/IncomeTransaction";
-import ExpenseTransaction from "./screens/FinancialReport/ExpenseTransaction";
-import HomeScreen from "./screens/HomeScreen";
-import Transaction from "./screens/Transaction/Transaction";
-import { TouchableOpacity, Text, View } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
 
 import MainTabs from "./tabs/MainTabs";
 import CreateBudget from "./screens/Budget/CreateBudget";
@@ -22,7 +17,7 @@ import HomeOnboardScreen from "./screens/HomeOnboardScreen";
 import LaunchScreen from "./screens/LaunchScreen";
 
 import { GlobalContext } from "./context/GlobalContext";
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import LoadingModal from "./components/LoadingModal";
 import DetailTransaction from "./screens/Transaction/DetailTransaction";
 import ExpenseReport from "./screens/FinancialReport/ExpenseReport";
@@ -33,7 +28,7 @@ import ChartReport from "./screens/FinancialReport/ChartReport";
 
 const Stack = createNativeStackNavigator();
 
-function App() {
+export default function App() {
     const [fontsLoaded] = useFonts({
         "Inter-Bold": require("./assets/fonts/Inter-Bold.ttf"),
         "Inter-SemiBold": require("./assets/fonts/Inter-SemiBold.ttf"),
@@ -42,89 +37,6 @@ function App() {
         "Inter-Black": require("./assets/fonts/Inter-Black.ttf"),
         "Inter-Light": require("./assets/fonts/Inter-Light.ttf"),
     });
-
-    // const onLayoutRootView = useCallback(async () => {
-    //     if (fontsLoaded || fontError) {
-    //         await SplashScreen.hideAsync();
-    //     }
-    // }, [fontsLoaded, fontError]);
-
-    // if (!fontsLoaded && !fontError) {
-    //     return null;
-    // }
-
-    // return (
-    //     <NavigationContainer>
-    //         {/* <Stack.Navigator>
-    //             <Stack.Screen
-    //                 options={{
-    //                     headerTitleAlign: "center",
-    //                     headerLeft: () => (
-    //                         <TouchableOpacity>
-    //                             <AntDesign name="arrowleft" style={{ fontSize: 24 }} />
-    //                         </TouchableOpacity>
-    //                     ),
-    //                 }}
-    //                 name="Transaction"
-    //                 component={Transaction}
-    //             />
-    //             <Stack.Screen options={{ headerShown: false }} name="Homescreen" component={HomeSceen} />
-    //             <Stack.Screen options={{ headerShown: false }} name="IncomeTransaction" component={IncomeTransaction} />
-
-    //             <Stack.Screen options={{ headerShown: false }} name="OnboardingScreen" component={OnboardingScreen} />
-
-    //             <Stack.Screen options={{ headerShown: false }} name="LoginScreen" component={LoginScreen} />
-
-    //             <Stack.Screen options={{ headerShown: false }} name="RegisterScreen" component={RegisterScreen} />
-    //         </Stack.Navigator> */}
-    //         <Stack.Navigator>
-    //             <Stack.Screen name="Budget" component={MainTabs} options={{ headerShown: false }} />
-    //             <Stack.Screen
-    //                 name="CreateBudget"
-    //                 component={CreateBudget}
-    //                 options={{
-    //                     title: "Create Budget",
-    //                     headerStyle: {
-    //                         backgroundColor: primaryColor,
-    //                     },
-    //                     headerTitleAlign: "center",
-    //                     headerTintColor: "#fff",
-    //                     headerTitleStyle: {
-    //                         fontSize: 18,
-    //                         color: "#fff",
-    //                         fontFamily: "Inter-Bold",
-    //                     },
-    //                     headerShadowVisible: false,
-    //                 }}
-    //             />
-    //             <Stack.Screen
-    //                 name="DetailBudget"
-    //                 component={DetailBudget}
-    //                 options={{
-    //                     headerShown: false,
-    //                 }}
-    //             />
-    //             <Stack.Screen
-    //                 name="EditBudget"
-    //                 component={CreateBudget}
-    //                 options={{
-    //                     title: "Edit Budget",
-    //                     headerStyle: {
-    //                         backgroundColor: primaryColor,
-    //                     },
-    //                     headerTitleAlign: "center",
-    //                     headerTintColor: "#fff",
-    //                     headerTitleStyle: {
-    //                         fontSize: 18,
-    //                         color: "#fff",
-    //                         fontFamily: "Inter-Bold",
-    //                     },
-    //                     headerShadowVisible: false,
-    //                 }}
-    //             />
-    //         </Stack.Navigator>
-    //     </NavigationContainer>
-    // );
 
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(false);
@@ -284,5 +196,3 @@ function App() {
         </GlobalContext.Provider>
     );
 }
-
-export default App;

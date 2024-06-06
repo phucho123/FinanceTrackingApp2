@@ -87,12 +87,12 @@ function CreateBudget({ navigation }) {
                 navigation.navigate("DetailBudget", { budgetId: response.data._id });
             } else {
                 console.log("Error:", response.data.message);
-                setError(response.data.message || "Create New Budget failed");
+                // setError(response.data.message || "Create New Budget failed");
             }
         } catch (error) {
             console.log("Error details:", error.response ? error.response.data : error.message);
             setLoading(false);
-            setError(error.response ? error.response.data.message : "An error occurred. Please try again.");
+            // setError(error.response ? error.response.data.message : "An error occurred. Please try again.");
         }
     };
 
@@ -215,7 +215,7 @@ function CreateBudget({ navigation }) {
                             const body = {
                                 userId: user._id,
                                 categoryName,
-                                maxMoney,
+                                maxMoney: parseInt(maxMoney),
                                 isAlert,
                                 alertPoint,
                             };
